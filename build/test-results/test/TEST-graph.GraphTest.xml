@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="graph.GraphTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-06-03T13:22:14" hostname="Terence-Lim-Say-Jian" time="0.012">
+  <properties/>
+  <testcase name="depthFirstSearch()" classname="graph.GraphTest" time="0.012"/>
+  <system-out><![CDATA[aaron
+bryan
+charlie
+bryan
+8
+[aaron, dillon, bryan, charlie]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
