@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,10 +44,12 @@ class GraphTest {
   }
 
   @Test
-  void djikstraSearch() {
+  void findShortestPath() throws Exception {
     Graph mrtGraph = getMrtMap();
 
-    mrtGraph.djikstraSearch("A", "F");
+    List<Vertex> shortestPath = mrtGraph.findShortestPath("A", "F");
+
+    System.out.println(shortestPath);
   }
 
   private Graph getMrtMap() {

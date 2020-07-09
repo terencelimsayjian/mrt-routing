@@ -1,6 +1,7 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,7 +11,6 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 public class Graph {
   private HashMap<Vertex, List<Edge>> adjacencyList;
@@ -36,7 +36,7 @@ public class Graph {
     v2Edges.add(new Edge(new Vertex(v1), weight));
   }
 
-  public void breadthFirstTraversal(String startingNode) {
+  public Set<Vertex> breadthFirstTraversal(String startingNode) {
     Set<Vertex> visited = new HashSet<>();
     Queue<Vertex> nodesToExploreAdjacentNodes = new LinkedList<>();
 
@@ -55,10 +55,10 @@ public class Graph {
       }
     }
 
-    System.out.println(visited);
+    return visited;
   }
 
-  public void depthFirstTraversal(String startingNode) {
+  public Set<Vertex> depthFirstTraversal(String startingNode) {
     Set<Vertex> visited = new HashSet<>();
     Stack<Vertex> nodesToExplore = new Stack<>();
 
@@ -77,89 +77,84 @@ public class Graph {
       }
     }
 
-    System.out.println(visited);
+    return visited;
   }
 
-  public void djikstraSearch(String starting, String ending) {
-    Vertex startingVertex = new Vertex(starting);
-    Vertex endingVertex = new Vertex(ending);
+  public boolean hasVertex(String name) {
+    return adjacencyList.get(new Vertex(name)) != null;
+  }
 
-    if (!adjacencyList.containsKey(startingVertex) || adjacencyList.containsKey(endingVertex)) {
+  public List<Vertex> findShortestPath(String startingNode, String endingNode) throws NoPathExistsException {
+    // This algorithm uses the Dijkstra algorithm to find shortest path
+    if (!hasVertex(startingNode) || !hasVertex(endingNode)) {
       throw new NoSuchVertexException();
     }
 
-    Set<Vertex> unvisitedVertexes = new HashSet<>(adjacencyList.keySet());
-    List<DijkstraSearchResult> dijkstraSearchResults = new HashSet<>(adjacencyList.keySet()).stream().map(vertex -> {
-      DijkstraSearchResult dijkstraSearchResult = new DijkstraSearchResult(vertex);
+    Vertex startingVertex = new Vertex(startingNode);
+    Vertex endingVertex = new Vertex(endingNode);
+
+    Set<Vertex> allVertices = breadthFirstTraversal(startingNode);
+
+    List<SearchResult> searchResults = new ArrayList<>();
+    SearchResult selectedSearchResult = null;
+
+    for (Vertex vertex : allVertices) {
+      SearchResult searchResult = new SearchResult(vertex);
 
       if (vertex.equals(startingVertex)) {
-        dijkstraSearchResult.setDistance(0);
+        searchResult.setCostToReachThisVertex(0);
+        selectedSearchResult = searchResult;
       }
 
-      return dijkstraSearchResult;
-    }).collect(Collectors.toList());
+      searchResults.add(searchResult);
+    }
 
-    Vertex currentVertex = startingVertex;
+    while (true) {
+      selectedSearchResult.setVisited(true);
+      Vertex selectedVertex = selectedSearchResult.getVertex();
+      if (selectedVertex.equals(endingVertex)) {
+        List<Vertex> shortestPath = new ArrayList<>();
+        shortestPath.add(endingVertex);
 
-    while (!currentVertex.equals(endingVertex)) {
-      unvisitedVertexes.remove(currentVertex);
+        Vertex foundVertex = endingVertex;
 
-      Vertex finalCurrentVertex = currentVertex;
-      DijkstraSearchResult currentSearchResult = dijkstraSearchResults.stream().filter(s -> s.getVertex().equals(finalCurrentVertex)).findFirst().get();
+        while (!foundVertex.equals(startingVertex)) {
+          Vertex finalFoundVertex = foundVertex;
+          SearchResult searchResult = searchResults.stream().filter(sr -> sr.getVertex().equals(finalFoundVertex)).findFirst().get();
 
-      List<Edge> connectingEdges = adjacencyList.get(currentVertex);
+          Vertex previousVertex = searchResult.getPreviousVertex();
+          shortestPath.add(previousVertex);
+          foundVertex = previousVertex;
+        }
 
-      for (Edge edge : connectingEdges) {
-        if (!unvisitedVertexes.contains(edge)) {
+        Collections.reverse(shortestPath);
+        return shortestPath;
+      }
 
-          DijkstraSearchResult edgeSearchResult = dijkstraSearchResults.stream().filter(s -> s.getVertex().equals(edge.getTrailingVertex())).findFirst().get();
-          int newDistanceFromCurrentVertexToNewEdge = currentSearchResult.getWeight() + edge.getWeight();
+      List<Edge> edges = adjacencyList.get(selectedVertex);
 
-          if (edgeSearchResult.isDistanceUnintialized() || newDistanceFromCurrentVertexToNewEdge < edgeSearchResult.getWeight()) {
-            edgeSearchResult.setDistance(newDistanceFromCurrentVertexToNewEdge);
-            edgeSearchResult.setShortestPrecedingVertex(currentVertex);
+      for (Edge edge : edges) {
+        SearchResult searchResultToAssess = searchResults.stream().filter(sr -> sr.getVertex().equals(edge.getTrailingVertex())).findFirst().get();
+
+        if (!searchResultToAssess.isVisited()) {
+          Integer costToReachCurrentVertex = edge.getWeight() + selectedSearchResult.getCostToReachThisVertex();
+
+          if (searchResultToAssess.isUnknownCost() || costToReachCurrentVertex < searchResultToAssess.getCostToReachThisVertex()) {
+            searchResultToAssess.setPreviousVertex(selectedVertex);
+            searchResultToAssess.setCostToReachThisVertex(costToReachCurrentVertex);
           }
         }
       }
 
-      // TODO: Account for case where there is no route to end destination
+      Optional<SearchResult> nextSearchResultToExplore = searchResults.stream().filter(s -> !s.isVisited()).min(Comparator.comparing(SearchResult::getCostToReachThisVertex, Comparator.nullsLast(Comparator.naturalOrder())));
 
-      Optional<DijkstraSearchResult> min = dijkstraSearchResults.stream()
-          .filter(s -> !s.isDistanceUnintialized())
-          .filter(s -> unvisitedVertexes.contains(s.getVertex()))
-          .min(Comparator.comparingInt(DijkstraSearchResult::getWeight));
-
-      currentVertex = min.get().getVertex();
+      if (nextSearchResultToExplore.isPresent()) {
+        selectedSearchResult = nextSearchResultToExplore.get();
+      } else {
+        throw new NoPathExistsException();
+      }
     }
-
-    Vertex v = endingVertex;
-    List<Vertex> route = new ArrayList<>();
-    route.add(endingVertex);
-
-    while (!v.equals(startingVertex)) {
-      Vertex finalV = v;
-      DijkstraSearchResult dijkstraSearchResult = dijkstraSearchResults.stream().filter(s -> s.getVertex().equals(finalV)).findFirst().get();
-      route.add(dijkstraSearchResult.getShortestPrecedingVertex());
-      v = dijkstraSearchResult.getShortestPrecedingVertex();
-    }
-
-    // While currentVertexIsNotEndingVertex
-      // Remove currentVertex from unvisited vertex
-      // Get all adjacent vertexes to the current vertex
-      // Get currentSearchResult from DijkstraSearchResult
-
-      // For each of the adjacent vertexes
-        // Stop if adjacentVertice is visited
-        // If not yet visited:
-        // Find corresponding result in DijkstraSearchResult
-        // if result isInfinite || resultWeight + currentSearchResult < result.getWeight()
-          // set  resultWeight + currentSearchResult
-          // Update precedingVertex to currentVertex
-
-
-
 
   }
-
 
 }
