@@ -110,70 +110,75 @@ public class Graph {
     Vertex startingVertex = new Vertex(startingNode);
     Vertex endingVertex = new Vertex(endingNode);
 
-    Set<Vertex> allVertices = breadthFirstTraversal(startingNode);
+    List<SearchResult> visitedSearchResults = new ArrayList<>();
+    List<SearchResult> searchResults = initialiseSearchResults(startingVertex);
 
-    List<SearchResult> searchResults = new ArrayList<>();
-    SearchResult selectedSearchResult = null;
+    while (searchResults.size() > 0 && !searchResults.get(0).isUnknownCost()) {
+      SearchResult selectedSearchResult = searchResults.remove(0);
+      visitedSearchResults.add(selectedSearchResult);
+
+      Vertex selectedVertex = selectedSearchResult.getVertex();
+      if (selectedVertex.equals(endingVertex)) {
+        List<String> shortestPath = getShortestPath(visitedSearchResults, startingVertex, endingVertex);
+        return new ShortestPathResult(shortestPath, selectedSearchResult.getCostToReachThisVertex(), (int) visitedSearchResults.size());
+      }
+
+      List<Edge> edges = adjacencyList.get(selectedVertex);
+
+      for (Edge edge : edges) {
+        Optional<SearchResult> unvisitedSearchResult = searchResults.stream().filter(sr -> sr.getVertex().equals(edge.getTrailingVertex())).findFirst();
+
+        if (unvisitedSearchResult.isEmpty()) {
+          continue;
+        }
+
+        SearchResult searchResultToAssess = unvisitedSearchResult.get();
+        Integer costToReachCurrentVertex = edge.getWeight() + selectedSearchResult.getCostToReachThisVertex();
+
+        if (searchResultToAssess.isUnknownCost() || costToReachCurrentVertex < searchResultToAssess.getCostToReachThisVertex()) {
+          searchResultToAssess.setPreviousVertex(selectedVertex);
+          searchResultToAssess.setCostToReachThisVertex(costToReachCurrentVertex);
+        }
+      }
+
+      Collections.sort(searchResults, Comparator.comparing(SearchResult::getCostToReachThisVertex, Comparator.nullsLast(Comparator.naturalOrder())));
+    }
+
+    throw new NoPathExistsException();
+  }
+
+  private List<SearchResult> initialiseSearchResults(Vertex startingVertex) {
+    Set<Vertex> allVertices = breadthFirstTraversal(startingVertex.getName());
+    List<SearchResult> searchResults = new LinkedList<>();
 
     for (Vertex vertex : allVertices) {
       SearchResult searchResult = new SearchResult(vertex);
 
       if (vertex.equals(startingVertex)) {
         searchResult.setCostToReachThisVertex(0);
-        selectedSearchResult = searchResult;
       }
 
       searchResults.add(searchResult);
     }
+    return searchResults;
+  }
 
-    while (true) {
-      selectedSearchResult.setVisited(true);
-      Vertex selectedVertex = selectedSearchResult.getVertex();
-      if (selectedVertex.equals(endingVertex)) {
-        List<String> shortestPath = new ArrayList<>();
-        shortestPath.add(endingVertex.getName());
+  private List<String> getShortestPath(List<SearchResult> visitedSearchResults, Vertex startingVertex, Vertex endingVertex) {
+    List<String> shortestPath = new ArrayList<>();
+    shortestPath.add(endingVertex.getName());
 
-        Vertex foundVertex = endingVertex;
+    Vertex foundVertex = endingVertex;
+    while (!foundVertex.equals(startingVertex)) {
+      Vertex finalFoundVertex = foundVertex;
+      SearchResult searchResult = visitedSearchResults.stream().filter(sr -> sr.getVertex().equals(finalFoundVertex)).findFirst().get();
 
-        while (!foundVertex.equals(startingVertex)) {
-          Vertex finalFoundVertex = foundVertex;
-          SearchResult searchResult = searchResults.stream().filter(sr -> sr.getVertex().equals(finalFoundVertex)).findFirst().get();
-
-          Vertex previousVertex = searchResult.getPreviousVertex();
-          shortestPath.add(previousVertex.getName());
-          foundVertex = previousVertex;
-        }
-
-        long numberOfVisitedNodes = searchResults.stream().filter(sr -> sr.isVisited()).count();
-
-        Collections.reverse(shortestPath);
-        return new ShortestPathResult(shortestPath, selectedSearchResult.getCostToReachThisVertex(), (int) numberOfVisitedNodes);
-      }
-
-      List<Edge> edges = adjacencyList.get(selectedVertex);
-
-      for (Edge edge : edges) {
-        SearchResult searchResultToAssess = searchResults.stream().filter(sr -> sr.getVertex().equals(edge.getTrailingVertex())).findFirst().get();
-
-        if (!searchResultToAssess.isVisited()) {
-          Integer costToReachCurrentVertex = edge.getWeight() + selectedSearchResult.getCostToReachThisVertex();
-
-          if (searchResultToAssess.isUnknownCost() || costToReachCurrentVertex < searchResultToAssess.getCostToReachThisVertex()) {
-            searchResultToAssess.setPreviousVertex(selectedVertex);
-            searchResultToAssess.setCostToReachThisVertex(costToReachCurrentVertex);
-          }
-        }
-      }
-
-      Optional<SearchResult> nextSearchResultToExplore = searchResults.stream().filter(s -> !s.isVisited()).min(Comparator.comparing(SearchResult::getCostToReachThisVertex, Comparator.nullsLast(Comparator.naturalOrder())));
-
-      if (nextSearchResultToExplore.isPresent()) {
-        selectedSearchResult = nextSearchResultToExplore.get();
-      } else {
-        throw new NoPathExistsException();
-      }
+      Vertex previousVertex = searchResult.getPreviousVertex();
+      shortestPath.add(previousVertex.getName());
+      foundVertex = previousVertex;
     }
 
+    Collections.reverse(shortestPath);
+    return shortestPath;
   }
 
 }
