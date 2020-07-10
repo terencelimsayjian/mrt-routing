@@ -1,9 +1,7 @@
 package graph;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -141,7 +139,7 @@ public class Graph {
         }
       }
 
-      Collections.sort(searchResults, Comparator.comparing(SearchResult::getCostToReachThisVertex, Comparator.nullsLast(Comparator.naturalOrder())));
+      Collections.sort(searchResults);
     }
 
     throw new NoPathExistsException();
