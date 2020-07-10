@@ -108,8 +108,12 @@ public class Graph {
     Vertex startingVertex = new Vertex(startingNode);
     Vertex endingVertex = new Vertex(endingNode);
 
-    List<SearchResult> visitedSearchResults = new ArrayList<>();
     List<SearchResult> searchResults = initialiseSearchResults(startingVertex);
+    return calculateShortestPath(startingVertex, endingVertex, searchResults);
+  }
+
+  private ShortestPathResult calculateShortestPath(Vertex startingVertex, Vertex endingVertex, List<SearchResult> searchResults) throws NoPathExistsException {
+    List<SearchResult> visitedSearchResults = new ArrayList<>();
 
     while (searchResults.size() > 0 && !searchResults.get(0).isUnknownCost()) {
       SearchResult selectedSearchResult = searchResults.remove(0);
