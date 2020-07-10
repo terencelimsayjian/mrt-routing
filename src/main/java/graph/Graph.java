@@ -79,24 +79,38 @@ public class Graph {
     return visited;
   }
 
-  public Edge getEdge(String v1, String v2) {
-    if (!hasVertex(v1) || !hasVertex(v2)) {
-      throw new NoSuchVertexException();
-    }
-
-    List<Edge> edges = adjacencyList.get(new Vertex(v1));
-
-    Optional<Edge> optionalEdge = edges.stream().filter(e -> e.getTrailingVertex().equals(new Vertex(v2))).findFirst();
-
-    if (optionalEdge.isEmpty()) {
-      throw new NoSuchVertexException();
-    }
-
-    return optionalEdge.get();
-  }
-
   public boolean hasVertex(String name) {
     return adjacencyList.get(new Vertex(name)) != null;
+  }
+
+  public ShortestPathResult findShortestPathAStar(String startingNode, String endingNode) throws NoPathExistsException {
+    if (!hasVertex(startingNode) || !hasVertex(endingNode)) {
+      throw new NoSuchVertexException();
+    }
+
+    Vertex startingVertex = new Vertex(startingNode);
+    Vertex endingVertex = new Vertex(endingNode);
+
+    List<SearchResult> searchResults = initialiseSearchResultsCartesianHeuristic(startingVertex);
+    return calculateShortestPath(startingVertex, endingVertex, searchResults);
+  }
+
+  private List<SearchResult> initialiseSearchResultsCartesianHeuristic(Vertex startingVertex) {
+    Set<Vertex> allVertices = breadthFirstTraversal(startingVertex.getName());
+
+    List<SearchResult> searchResults = new LinkedList<>();
+
+    for (Vertex vertex : allVertices) {
+      SearchResult searchResult = new SearchResult(vertex);
+
+      if (vertex.equals(startingVertex)) {
+        searchResult.setCostToReachThisVertex(0);
+      }
+
+      // Calculate cartesian distance of all nodes to the starting vertex
+      searchResults.add(searchResult);
+    }
+    return searchResults;
   }
 
   public ShortestPathResult findShortestPath(String startingNode, String endingNode) throws NoPathExistsException {
