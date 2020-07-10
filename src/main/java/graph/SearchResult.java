@@ -1,48 +1,48 @@
 package graph;
 
-public class SearchResult {
+class SearchResult {
 
   private final Vertex vertex;
   private boolean isVisited;
   private Vertex previousVertex;
   private Integer costToReachThisVertex;
 
-  public SearchResult(Vertex vertex) {
+  SearchResult(Vertex vertex) {
     this.vertex = vertex;
     this.isVisited = false;
     this.previousVertex = null;
     this.costToReachThisVertex = null;
   }
 
-  public Vertex getVertex() {
+  Vertex getVertex() {
     return vertex;
   }
 
-  public boolean isVisited() {
+  boolean isVisited() {
     return isVisited;
   }
 
-  public Vertex getPreviousVertex() {
+  Vertex getPreviousVertex() {
     return previousVertex;
   }
 
-  public Integer getCostToReachThisVertex() {
+  Integer getCostToReachThisVertex() {
     return costToReachThisVertex;
   }
 
-  public void setVisited(boolean visited) {
+  void setVisited(boolean visited) {
     isVisited = visited;
   }
 
-  public void setPreviousVertex(Vertex previousVertex) {
+  void setPreviousVertex(Vertex previousVertex) {
     this.previousVertex = previousVertex;
   }
 
-  public void setCostToReachThisVertex(Integer costToReachThisVertex) {
+  void setCostToReachThisVertex(Integer costToReachThisVertex) {
     this.costToReachThisVertex = costToReachThisVertex;
   }
 
-  public boolean isUnknownCost() {
+  boolean isUnknownCost() {
     return this.costToReachThisVertex == null;
   }
 
