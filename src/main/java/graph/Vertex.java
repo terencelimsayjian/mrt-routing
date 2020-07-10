@@ -1,13 +1,13 @@
 package graph;
 
-public class Vertex {
+class Vertex {
   private final String name;
 
-  public Vertex(String name) {
+  Vertex(String name) {
     this.name = name;
   }
 
-  public String getName() {
+  String getName() {
     return name;
   }
 

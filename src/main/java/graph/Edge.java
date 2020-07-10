@@ -1,19 +1,19 @@
 package graph;
 
-public class Edge {
+class Edge {
   private final Vertex trailingVertex;
   private final int weight;
 
-  public Edge(Vertex trailingVertex, int weight) {
+  Edge(Vertex trailingVertex, int weight) {
     this.trailingVertex = trailingVertex;
     this.weight = weight;
   }
 
-  public Vertex getTrailingVertex() {
+  Vertex getTrailingVertex() {
     return trailingVertex;
   }
 
-  public int getWeight() {
+  int getWeight() {
     return weight;
   }
 }
