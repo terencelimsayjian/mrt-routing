@@ -76,11 +76,12 @@ class GraphTest {
       graph.addEdge("A", "B", 1);
       graph.addEdge("B", "C", 1);
 
-      List<Vertex> actual = graph.findShortestPath("A", "C");
+      ShortestPathResult actual = graph.findShortestPath("A", "C");
 
-      List<Vertex> expectedShortestPath = Arrays.asList(new Vertex("A"), new Vertex("B"), new Vertex("C"));
+      List<String> expectedShortestPath = Arrays.asList("A", "B", "C");
 
-      assertEquals(expectedShortestPath, actual);
+      assertEquals(expectedShortestPath, actual.getShortestPath());
+      assertEquals(2, actual.getTotalCost());
     }
 
     @Test
@@ -95,11 +96,12 @@ class GraphTest {
       graph.addEdge("C", "D", 8);
       graph.addEdge("B", "D", 1);
 
-      List<Vertex> actual = graph.findShortestPath("A", "D");
+      ShortestPathResult actual = graph.findShortestPath("A", "D");
 
-      List<Vertex> expectedShortestPath = Arrays.asList(new Vertex("A"), new Vertex("B"), new Vertex("D"));
+      List<String> expectedShortestPath = Arrays.asList("A", "B", "D");
 
-      assertEquals(expectedShortestPath, actual);
+      assertEquals(expectedShortestPath, actual.getShortestPath());
+      assertEquals(6, actual.getTotalCost());
     }
 
     @Test
@@ -121,11 +123,12 @@ class GraphTest {
       graph.addEdge("D", "E", 2);
       graph.addEdge("E", "F", 2);
 
-      List<Vertex> actual = graph.findShortestPath("A", "F");
+      ShortestPathResult actual = graph.findShortestPath("A", "F");
 
-      List<Vertex> expectedShortestPath = Arrays.asList(new Vertex("A"), new Vertex("D"), new Vertex("E"), new Vertex("F"));
+      List<String> expectedShortestPath = Arrays.asList("A", "D", "E", "F");
 
-      assertEquals(expectedShortestPath, actual);
+      assertEquals(expectedShortestPath, actual.getShortestPath());
+      assertEquals(8, actual.getTotalCost());
     }
 
   }

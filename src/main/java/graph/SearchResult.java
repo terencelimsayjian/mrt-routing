@@ -6,12 +6,22 @@ class SearchResult {
   private boolean isVisited;
   private Vertex previousVertex;
   private Integer costToReachThisVertex;
+  private Integer heuristicCost;
 
   SearchResult(Vertex vertex) {
     this.vertex = vertex;
     this.isVisited = false;
     this.previousVertex = null;
     this.costToReachThisVertex = null;
+    this.heuristicCost = 0;
+  }
+
+  SearchResult(Vertex vertex, int heuristicCost) {
+    this.vertex = vertex;
+    this.isVisited = false;
+    this.previousVertex = null;
+    this.costToReachThisVertex = null;
+    this.heuristicCost = heuristicCost;
   }
 
   Vertex getVertex() {

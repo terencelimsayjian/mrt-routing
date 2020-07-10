@@ -1,5 +1,6 @@
 package graph;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -80,11 +81,27 @@ public class Graph {
     return visited;
   }
 
+  public Edge getEdge(String v1, String v2) {
+    if (!hasVertex(v1) || !hasVertex(v2)) {
+      throw new NoSuchVertexException();
+    }
+
+    List<Edge> edges = adjacencyList.get(new Vertex(v1));
+
+    Optional<Edge> optionalEdge = edges.stream().filter(e -> e.getTrailingVertex().equals(new Vertex(v2))).findFirst();
+
+    if (optionalEdge.isEmpty()) {
+      throw new NoSuchVertexException();
+    }
+
+    return optionalEdge.get();
+  }
+
   public boolean hasVertex(String name) {
     return adjacencyList.get(new Vertex(name)) != null;
   }
 
-  public List<Vertex> findShortestPath(String startingNode, String endingNode) throws NoPathExistsException {
+  public ShortestPathResult findShortestPath(String startingNode, String endingNode) throws NoPathExistsException {
     // This algorithm uses the Dijkstra algorithm to find shortest path
     if (!hasVertex(startingNode) || !hasVertex(endingNode)) {
       throw new NoSuchVertexException();
@@ -113,8 +130,8 @@ public class Graph {
       selectedSearchResult.setVisited(true);
       Vertex selectedVertex = selectedSearchResult.getVertex();
       if (selectedVertex.equals(endingVertex)) {
-        List<Vertex> shortestPath = new ArrayList<>();
-        shortestPath.add(endingVertex);
+        List<String> shortestPath = new ArrayList<>();
+        shortestPath.add(endingVertex.getName());
 
         Vertex foundVertex = endingVertex;
 
@@ -123,12 +140,14 @@ public class Graph {
           SearchResult searchResult = searchResults.stream().filter(sr -> sr.getVertex().equals(finalFoundVertex)).findFirst().get();
 
           Vertex previousVertex = searchResult.getPreviousVertex();
-          shortestPath.add(previousVertex);
+          shortestPath.add(previousVertex.getName());
           foundVertex = previousVertex;
         }
 
+        long numberOfVisitedNodes = searchResults.stream().filter(sr -> sr.isVisited()).count();
+
         Collections.reverse(shortestPath);
-        return shortestPath;
+        return new ShortestPathResult(shortestPath, selectedSearchResult.getCostToReachThisVertex(), (int) numberOfVisitedNodes);
       }
 
       List<Edge> edges = adjacencyList.get(selectedVertex);
