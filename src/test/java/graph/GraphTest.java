@@ -17,10 +17,10 @@ class GraphTest {
   void setUp() {
     graph = new Graph();
 
-    graph.addVertex("aaron");
-    graph.addVertex("bryan");
-    graph.addVertex("charlie");
-    graph.addVertex("dillon");
+    graph.addVertex(new Vertex("aaron"));
+    graph.addVertex(new Vertex("bryan"));
+    graph.addVertex(new Vertex("charlie"));
+    graph.addVertex(new Vertex("dillon"));
 
     graph.addEdge("aaron", "bryan", 1);
     graph.addEdge("aaron", "charlie", 1);
@@ -45,7 +45,7 @@ class GraphTest {
     @Test
     void shouldThrowNoSuchVertexExceptionIfStartingNodeDoesNotExistInGraph() throws Exception {
       Graph graph = new Graph();
-      graph.addVertex("B");
+      graph.addVertex(new Vertex("B"));
 
       assertThrows(NoSuchVertexException.class, () -> graph.findShortestPath("unknown-vertex", "B"));
     }
@@ -53,7 +53,7 @@ class GraphTest {
     @Test
     void shouldThrowNoSuchVertexExceptionIfEndingNodeDoesNotExistInGraph() throws Exception {
       Graph graph = new Graph();
-      graph.addVertex("A");
+      graph.addVertex(new Vertex("A"));
 
       assertThrows(NoSuchVertexException.class, () -> graph.findShortestPath("A", "unknown-vertex"));
     }
@@ -61,8 +61,8 @@ class GraphTest {
     @Test
     void shouldThrowNoPathExistsExceptionIfThereIsNoPathToEndingNode() throws Exception {
       Graph graph = new Graph();
-      graph.addVertex("A");
-      graph.addVertex("B");
+      graph.addVertex(new Vertex("A"));
+      graph.addVertex(new Vertex("B"));
 
       assertThrows(NoPathExistsException.class, () -> graph.findShortestPath("A", "B"));
     }
@@ -70,9 +70,9 @@ class GraphTest {
     @Test
     void shouldFindShortestPathWithOnlyThreeNodesLinearlyConnected() throws Exception {
       Graph graph = new Graph();
-      graph.addVertex("A");
-      graph.addVertex("B");
-      graph.addVertex("C");
+      graph.addVertex(new Vertex("A"));
+      graph.addVertex(new Vertex("B"));
+      graph.addVertex(new Vertex("C"));
       graph.addEdge("A", "B", 1);
       graph.addEdge("B", "C", 1);
 
@@ -87,10 +87,10 @@ class GraphTest {
     @Test
     void shouldFindShortestPathWithTwoAlternativeRoutes() throws Exception {
       Graph graph = new Graph();
-      graph.addVertex("A");
-      graph.addVertex("B");
-      graph.addVertex("C");
-      graph.addVertex("D");
+      graph.addVertex(new Vertex("A"));
+      graph.addVertex(new Vertex("B"));
+      graph.addVertex(new Vertex("C"));
+      graph.addVertex(new Vertex("D"));
       graph.addEdge("A", "B", 5);
       graph.addEdge("A", "C", 2);
       graph.addEdge("C", "D", 8);
@@ -108,12 +108,12 @@ class GraphTest {
     void shouldFindShortestPathWithComplicatedRoute() throws Exception {
       Graph graph = new Graph();
 
-      graph.addVertex("A");
-      graph.addVertex("B");
-      graph.addVertex("C");
-      graph.addVertex("D");
-      graph.addVertex("E");
-      graph.addVertex("F");
+      graph.addVertex(new Vertex("A"));
+      graph.addVertex(new Vertex("B"));
+      graph.addVertex(new Vertex("C"));
+      graph.addVertex(new Vertex("D"));
+      graph.addVertex(new Vertex("E"));
+      graph.addVertex(new Vertex("F"));
 
       graph.addEdge("A", "B", 6);
       graph.addEdge("A", "C", 5);
@@ -130,6 +130,10 @@ class GraphTest {
       assertEquals(expectedShortestPath, actual.getShortestPath());
       assertEquals(8, actual.getTotalCost());
     }
+  }
+
+  @Nested
+  class ASarSearch {
 
   }
 

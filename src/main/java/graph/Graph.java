@@ -1,5 +1,8 @@
 package graph;
 
+import geometry.Coordinate;
+import geometry.Geometry;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,8 +21,7 @@ public class Graph {
     adjacencyList = new HashMap<>();
   }
 
-  public void addVertex(String vertexName) {
-    Vertex vertex = new Vertex(vertexName);
+  public void addVertex(Vertex vertex) {
     adjacencyList.put(vertex, new ArrayList<>());
   }
 
@@ -91,23 +93,28 @@ public class Graph {
     Vertex startingVertex = new Vertex(startingNode);
     Vertex endingVertex = new Vertex(endingNode);
 
-    List<SearchResult> searchResults = initialiseSearchResultsCartesianHeuristic(startingVertex);
+    List<SearchResult> searchResults = initialiseSearchResultsCartesianHeuristic(startingVertex, endingVertex);
     return calculateShortestPath(startingVertex, endingVertex, searchResults);
   }
 
-  private List<SearchResult> initialiseSearchResultsCartesianHeuristic(Vertex startingVertex) {
+  private List<SearchResult> initialiseSearchResultsCartesianHeuristic(Vertex startingVertex, Vertex endingVertex) {
     Set<Vertex> allVertices = breadthFirstTraversal(startingVertex.getName());
 
     List<SearchResult> searchResults = new LinkedList<>();
 
     for (Vertex vertex : allVertices) {
-      SearchResult searchResult = new SearchResult(vertex);
+      double MRT_SPEED_KM_H = 80;
+      double distanceInKm = Geometry.calculateHaversineDistanceKm(new Coordinate(vertex.getLat(), vertex.getLng()), new Coordinate(endingVertex.getLat(), endingVertex.getLng()));
+      double timeTakenToReachInMinutes = distanceInKm / MRT_SPEED_KM_H;
+      int heuristicCost = (int) Math.round(timeTakenToReachInMinutes);
+
+      SearchResult searchResult = new SearchResult(vertex, heuristicCost);
+
 
       if (vertex.equals(startingVertex)) {
         searchResult.setCostToReachThisVertex(0);
       }
 
-      // Calculate cartesian distance of all nodes to the starting vertex
       searchResults.add(searchResult);
     }
     return searchResults;
