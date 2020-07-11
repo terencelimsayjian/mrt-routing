@@ -41,13 +41,9 @@ public class Graph {
     Set<Vertex> visited = new HashSet<>();
     Queue<Vertex> nodesToExploreAdjacentNodes = new LinkedList<>();
 
-    Optional<Vertex> startingVertex = adjacencyList.keySet().stream().filter(v -> v.equals(new Vertex(startingNode))).findFirst();
+    Vertex startingVertex = getVerticeFromGraph(startingNode);
 
-    if (startingVertex.isEmpty()) {
-      throw new NoSuchVertexException();
-    }
-
-    nodesToExploreAdjacentNodes.add(startingVertex.get());
+    nodesToExploreAdjacentNodes.add(startingVertex);
 
     while (!nodesToExploreAdjacentNodes.isEmpty()) {
       Vertex nodeToExplore = nodesToExploreAdjacentNodes.remove();
@@ -69,7 +65,9 @@ public class Graph {
     Set<Vertex> visited = new HashSet<>();
     Stack<Vertex> nodesToExplore = new Stack<>();
 
-    nodesToExplore.add(new Vertex(startingNode));
+    Vertex vertex = getVerticeFromGraph(startingNode);
+
+    nodesToExplore.add(vertex);
 
     while (!nodesToExplore.isEmpty()) {
       Vertex nodeToExplore = nodesToExplore.pop();
@@ -85,6 +83,16 @@ public class Graph {
     }
 
     return visited;
+  }
+
+  private Vertex getVerticeFromGraph(String verticeName) {
+    Optional<Vertex> startingVertex = adjacencyList.keySet().stream().filter(v -> v.equals(new Vertex(verticeName))).findFirst();
+
+    if (startingVertex.isEmpty()) {
+      throw new NoSuchVertexException();
+    }
+
+    return startingVertex.get();
   }
 
   public boolean hasVertex(String name) {
