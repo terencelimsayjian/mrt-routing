@@ -13,7 +13,7 @@ class GeometryTest {
 
     double haversineDistance = Geometry.calculateHaversineDistanceKm(c1, c2);
 
-    assertEquals(4705.12, haversineDistance, 0.1);
+    assertEquals(4208.1, haversineDistance, 0.1);
   }
 
   @Test
@@ -23,6 +23,17 @@ class GeometryTest {
 
     double haversineDistance = Geometry.calculateHaversineDistanceKm(c1, c2);
 
-    assertEquals(248.6, haversineDistance, 0.1);
+    assertEquals(314.4, haversineDistance, 0.1);
   }
+
+  @Test
+  void calculateHaversineDistanceBetweenTwoPoints3() {
+    Coordinate c1 = new Coordinate(1.35130868, 103.84915);
+    Coordinate c2 = new Coordinate(1.369933175, 103.8495535);
+
+    double haversineDistance = Geometry.calculateHaversineDistanceKm(c1, c2);
+
+    assertEquals(2.071, haversineDistance, 0.001);
+  }
+
 }

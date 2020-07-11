@@ -140,7 +140,28 @@ class GraphTest {
 
   @Nested
   class AStarSearch {
+    private final Vertex VERTEX_1 = new Vertex("BISHAN", 1.350838988, 103.8481398, "NS17");
+    private final Vertex VERTEX_2 = new Vertex("ANG MO KIO", 1.369933175, 103.8495535, "NS16");
+    private final Vertex VERTEX_3 = new Vertex("YIO CHU KANG", 1.381756046, 103.8449439, "NS15");
 
+    @Test
+    void name() throws Exception {
+      Graph graph = new Graph();
+
+      graph.addVertex(VERTEX_1);
+      graph.addVertex(VERTEX_2);
+      graph.addVertex(VERTEX_3);
+
+      graph.addEdge(VERTEX_1, VERTEX_2, 2);
+      graph.addEdge(VERTEX_2, VERTEX_3, 4);
+
+      ShortestPathResult actual = graph.findShortestPathAStar("BISHAN", "YIO CHU KANG");
+
+      List<String> expectedShortestPath = Arrays.asList("A", "D", "E", "F");
+
+      assertEquals(expectedShortestPath, actual.getShortestPath());
+      assertEquals(8, actual.getTotalCost());
+    }
   }
 
 }

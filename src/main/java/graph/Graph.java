@@ -104,8 +104,8 @@ public class Graph {
       throw new NoSuchVertexException();
     }
 
-    Vertex startingVertex = new Vertex(startingNode);
-    Vertex endingVertex = new Vertex(endingNode);
+    Vertex startingVertex = getVerticeFromGraph(startingNode);
+    Vertex endingVertex = getVerticeFromGraph(endingNode);
 
     List<SearchResult> searchResults = initialiseSearchResultsCartesianHeuristic(startingVertex, endingVertex);
     return calculateShortestPath(startingVertex, endingVertex, searchResults);
@@ -119,8 +119,9 @@ public class Graph {
     for (Vertex vertex : allVertices) {
       double MRT_SPEED_KM_H = 80;
       double distanceInKm = Geometry.calculateHaversineDistanceKm(new Coordinate(vertex.getLat(), vertex.getLng()), new Coordinate(endingVertex.getLat(), endingVertex.getLng()));
-      double timeTakenToReachInMinutes = distanceInKm / MRT_SPEED_KM_H;
-      int heuristicCost = (int) Math.round(timeTakenToReachInMinutes);
+      double timeTakenToReachInHours = distanceInKm / MRT_SPEED_KM_H;
+      int heuristicCost = (int) Math.round(timeTakenToReachInHours * 60);
+      // TODO: Consider not rounding?
 
       SearchResult searchResult = new SearchResult(vertex, heuristicCost);
 
