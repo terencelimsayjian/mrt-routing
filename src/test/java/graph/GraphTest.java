@@ -10,22 +10,32 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GraphTest {
-
   private Graph graph;
+  public static final Vertex VERTEX_A = new Vertex("A");
+  public static final Vertex VERTEX_B = new Vertex("B");
+  public static final Vertex VERTEX_C = new Vertex("C");
+  public static final Vertex VERTEX_D = new Vertex("D");
+  public static final Vertex VERTEX_E = new Vertex("E");
+  public static final Vertex VERTEX_F = new Vertex("F");
 
   @BeforeEach
   void setUp() {
     graph = new Graph();
 
-    graph.addVertex(new Vertex("aaron"));
-    graph.addVertex(new Vertex("bryan"));
-    graph.addVertex(new Vertex("charlie"));
-    graph.addVertex(new Vertex("dillon"));
+    Vertex aaron = new Vertex("aaron");
+    Vertex bryan = new Vertex("bryan");
+    Vertex charlie = new Vertex("charlie");
+    Vertex dillon = new Vertex("dillon");
 
-    graph.addEdge("aaron", "bryan", 1);
-    graph.addEdge("aaron", "charlie", 1);
-    graph.addEdge("aaron", "dillon", 1);
-    graph.addEdge("bryan", "charlie", 1);
+    graph.addVertex(aaron);
+    graph.addVertex(bryan);
+    graph.addVertex(charlie);
+    graph.addVertex(dillon);
+
+    graph.addEdge(aaron, bryan, 1);
+    graph.addEdge(aaron, charlie, 1);
+    graph.addEdge(aaron, dillon, 1);
+    graph.addEdge(bryan, charlie, 1);
   }
 
   @Test
@@ -45,7 +55,6 @@ class GraphTest {
     @Test
     void shouldThrowNoSuchVertexExceptionIfStartingNodeDoesNotExistInGraph() throws Exception {
       Graph graph = new Graph();
-      graph.addVertex(new Vertex("B"));
 
       assertThrows(NoSuchVertexException.class, () -> graph.findShortestPath("unknown-vertex", "B"));
     }
@@ -53,7 +62,6 @@ class GraphTest {
     @Test
     void shouldThrowNoSuchVertexExceptionIfEndingNodeDoesNotExistInGraph() throws Exception {
       Graph graph = new Graph();
-      graph.addVertex(new Vertex("A"));
 
       assertThrows(NoSuchVertexException.class, () -> graph.findShortestPath("A", "unknown-vertex"));
     }
@@ -61,8 +69,8 @@ class GraphTest {
     @Test
     void shouldThrowNoPathExistsExceptionIfThereIsNoPathToEndingNode() throws Exception {
       Graph graph = new Graph();
-      graph.addVertex(new Vertex("A"));
-      graph.addVertex(new Vertex("B"));
+      graph.addVertex(VERTEX_A);
+      graph.addVertex(VERTEX_B);
 
       assertThrows(NoPathExistsException.class, () -> graph.findShortestPath("A", "B"));
     }
@@ -70,11 +78,13 @@ class GraphTest {
     @Test
     void shouldFindShortestPathWithOnlyThreeNodesLinearlyConnected() throws Exception {
       Graph graph = new Graph();
-      graph.addVertex(new Vertex("A"));
-      graph.addVertex(new Vertex("B"));
-      graph.addVertex(new Vertex("C"));
-      graph.addEdge("A", "B", 1);
-      graph.addEdge("B", "C", 1);
+
+      graph.addVertex(VERTEX_A);
+      graph.addVertex(VERTEX_B);
+      graph.addVertex(VERTEX_C);
+
+      graph.addEdge(VERTEX_A, VERTEX_B, 1);
+      graph.addEdge(VERTEX_B, VERTEX_C, 1);
 
       ShortestPathResult actual = graph.findShortestPath("A", "C");
 
@@ -87,14 +97,16 @@ class GraphTest {
     @Test
     void shouldFindShortestPathWithTwoAlternativeRoutes() throws Exception {
       Graph graph = new Graph();
-      graph.addVertex(new Vertex("A"));
-      graph.addVertex(new Vertex("B"));
-      graph.addVertex(new Vertex("C"));
-      graph.addVertex(new Vertex("D"));
-      graph.addEdge("A", "B", 5);
-      graph.addEdge("A", "C", 2);
-      graph.addEdge("C", "D", 8);
-      graph.addEdge("B", "D", 1);
+
+      graph.addVertex(VERTEX_A);
+      graph.addVertex(VERTEX_B);
+      graph.addVertex(VERTEX_C);
+      graph.addVertex(VERTEX_D);
+
+      graph.addEdge(VERTEX_A, VERTEX_B, 5);
+      graph.addEdge(VERTEX_A, VERTEX_C, 2);
+      graph.addEdge(VERTEX_C, VERTEX_D, 8);
+      graph.addEdge(VERTEX_B, VERTEX_D, 1);
 
       ShortestPathResult actual = graph.findShortestPath("A", "D");
 
@@ -108,20 +120,20 @@ class GraphTest {
     void shouldFindShortestPathWithComplicatedRoute() throws Exception {
       Graph graph = new Graph();
 
-      graph.addVertex(new Vertex("A"));
-      graph.addVertex(new Vertex("B"));
-      graph.addVertex(new Vertex("C"));
-      graph.addVertex(new Vertex("D"));
-      graph.addVertex(new Vertex("E"));
-      graph.addVertex(new Vertex("F"));
+      graph.addVertex(VERTEX_A);
+      graph.addVertex(VERTEX_B);
+      graph.addVertex(VERTEX_C);
+      graph.addVertex(VERTEX_D);
+      graph.addVertex(VERTEX_E);
+      graph.addVertex(VERTEX_F);
 
-      graph.addEdge("A", "B", 6);
-      graph.addEdge("A", "C", 5);
-      graph.addEdge("A", "D", 4);
-      graph.addEdge("C", "E", 2);
-      graph.addEdge("B", "E", 9);
-      graph.addEdge("D", "E", 2);
-      graph.addEdge("E", "F", 2);
+      graph.addEdge(VERTEX_A, VERTEX_B, 6);
+      graph.addEdge(VERTEX_A, VERTEX_C, 5);
+      graph.addEdge(VERTEX_A, VERTEX_D, 4);
+      graph.addEdge(VERTEX_C, VERTEX_E, 2);
+      graph.addEdge(VERTEX_B, VERTEX_E, 9);
+      graph.addEdge(VERTEX_D, VERTEX_E, 2);
+      graph.addEdge(VERTEX_E, VERTEX_F, 2);
 
       ShortestPathResult actual = graph.findShortestPath("A", "F");
 
@@ -133,7 +145,7 @@ class GraphTest {
   }
 
   @Nested
-  class ASarSearch {
+  class AStarSearch {
 
   }
 

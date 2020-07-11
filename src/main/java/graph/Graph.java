@@ -25,16 +25,16 @@ public class Graph {
     adjacencyList.put(vertex, new ArrayList<>());
   }
 
-  public void addEdge(String v1, String v2, int weight) {
-    List<Edge> v1Edges = adjacencyList.get(new Vertex(v1));
-    List<Edge> v2Edges = adjacencyList.get(new Vertex(v2));
+  public void addEdge(Vertex newV1, Vertex newV2, int weight) {
+    List<Edge> v1Edges = adjacencyList.get(newV1);
+    List<Edge> v2Edges = adjacencyList.get(newV2);
 
     if (v1Edges == null || v2Edges == null) {
       throw new NoSuchVertexException();
     }
 
-    v1Edges.add(new Edge(new Vertex(v2), weight));
-    v2Edges.add(new Edge(new Vertex(v1), weight));
+    v1Edges.add(new Edge(newV1, weight));
+    v2Edges.add(new Edge(newV2, weight));
   }
 
   public Set<Vertex> breadthFirstTraversal(String startingNode) {
