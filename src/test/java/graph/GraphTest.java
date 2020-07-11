@@ -21,32 +21,26 @@ class GraphTest {
   @BeforeEach
   void setUp() {
     graph = new Graph();
+    graph.addVertex(VERTEX_A);
+    graph.addVertex(VERTEX_B);
+    graph.addVertex(VERTEX_C);
+    graph.addVertex(VERTEX_D);
 
-    Vertex aaron = new Vertex("aaron");
-    Vertex bryan = new Vertex("bryan");
-    Vertex charlie = new Vertex("charlie");
-    Vertex dillon = new Vertex("dillon");
-
-    graph.addVertex(aaron);
-    graph.addVertex(bryan);
-    graph.addVertex(charlie);
-    graph.addVertex(dillon);
-
-    graph.addEdge(aaron, bryan, 1);
-    graph.addEdge(aaron, charlie, 1);
-    graph.addEdge(aaron, dillon, 1);
-    graph.addEdge(bryan, charlie, 1);
+    graph.addEdge(VERTEX_A, VERTEX_B, 1);
+    graph.addEdge(VERTEX_A, VERTEX_C, 1);
+    graph.addEdge(VERTEX_A, VERTEX_D, 1);
+    graph.addEdge(VERTEX_B, VERTEX_C, 1);
   }
 
   @Test
   void breadthFirstSearch() {
-    graph.breadthFirstTraversal("bryan");
+    graph.breadthFirstTraversal("B");
     assertTrue(true);
   }
 
   @Test
   void depthFirstSearch() {
-    graph.depthFirstTraversal("dillon");
+    graph.depthFirstTraversal("D");
     assertTrue(true);
   }
 

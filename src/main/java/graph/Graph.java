@@ -25,23 +25,29 @@ public class Graph {
     adjacencyList.put(vertex, new ArrayList<>());
   }
 
-  public void addEdge(Vertex newV1, Vertex newV2, int weight) {
-    List<Edge> v1Edges = adjacencyList.get(newV1);
-    List<Edge> v2Edges = adjacencyList.get(newV2);
+  public void addEdge(Vertex v1, Vertex v2, int weight) {
+    List<Edge> v1Edges = adjacencyList.get(v1);
+    List<Edge> v2Edges = adjacencyList.get(v2);
 
     if (v1Edges == null || v2Edges == null) {
       throw new NoSuchVertexException();
     }
 
-    v1Edges.add(new Edge(newV1, weight));
-    v2Edges.add(new Edge(newV2, weight));
+    v1Edges.add(new Edge(v2, weight));
+    v2Edges.add(new Edge(v1, weight));
   }
 
   public Set<Vertex> breadthFirstTraversal(String startingNode) {
     Set<Vertex> visited = new HashSet<>();
     Queue<Vertex> nodesToExploreAdjacentNodes = new LinkedList<>();
 
-    nodesToExploreAdjacentNodes.add(new Vertex(startingNode));
+    Optional<Vertex> startingVertex = adjacencyList.keySet().stream().filter(v -> v.equals(new Vertex(startingNode))).findFirst();
+
+    if (startingVertex.isEmpty()) {
+      throw new NoSuchVertexException();
+    }
+
+    nodesToExploreAdjacentNodes.add(startingVertex.get());
 
     while (!nodesToExploreAdjacentNodes.isEmpty()) {
       Vertex nodeToExplore = nodesToExploreAdjacentNodes.remove();
