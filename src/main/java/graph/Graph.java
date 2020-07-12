@@ -97,7 +97,7 @@ public class Graph {
   private Vertex getVerticeFromGraph(String verticeName) {
     Optional<Vertex> startingVertex = adjacencyList.keySet().stream().filter(v -> v.equals(new Vertex(verticeName))).findFirst();
 
-    if (startingVertex.isEmpty()) {
+    if (!startingVertex.isPresent()) {
       throw new NoSuchVertexException();
     }
 
@@ -171,7 +171,7 @@ public class Graph {
       for (Edge edge : edges) {
         Optional<SearchResult> unvisitedSearchResult = searchResults.stream().filter(sr -> sr.getVertex().equals(edge.getTrailingVertex())).findFirst();
 
-        if (unvisitedSearchResult.isEmpty()) {
+        if (!unvisitedSearchResult.isPresent()) {
           continue;
         }
 

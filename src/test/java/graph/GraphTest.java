@@ -32,18 +32,6 @@ class GraphTest {
     graph.addEdge(VERTEX_B, VERTEX_C, 1);
   }
 
-  @Test
-  void breadthFirstSearch() {
-    graph.breadthFirstTraversal("B");
-    assertTrue(true);
-  }
-
-  @Test
-  void depthFirstSearch() {
-    graph.depthFirstTraversal("D");
-    assertTrue(true);
-  }
-
   @Nested
   class FindShortestPathDijkstra {
     @Test

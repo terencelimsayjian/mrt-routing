@@ -1,26 +1,26 @@
 package graph;
 
-class Vertex {
+public class Vertex {
   private final String id;
   private final String displayName;
   private final double lat;
   private final double lng;
 
-  Vertex(String id) {
+  public Vertex(String id) {
     this.id = id;
     this.lat = 0;
     this.lng = 0;
     this.displayName = id;
   }
 
-  Vertex(String id, String displayName, double lat, double lng) {
+  public Vertex(String id, String displayName, double lat, double lng) {
     this.id = id;
     this.displayName = displayName;
     this.lat = lat;
     this.lng = lng;
   }
 
-  Vertex(String id, String displayName) {
+  public Vertex(String id, String displayName) {
     this.id = id;
     this.displayName = displayName;
     this.lat = 0;
