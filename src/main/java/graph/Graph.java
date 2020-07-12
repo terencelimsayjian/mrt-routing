@@ -37,7 +37,16 @@ public class Graph {
     v2Edges.add(new Edge(v1, weight));
   }
 
-  public Set<Vertex> breadthFirstTraversal(String startingNode) {
+  public boolean hasVertex(String name) {
+    return adjacencyList.get(new Vertex(name)) != null;
+  }
+
+  public Set<Vertex> getAllVertices() {
+    Optional<Vertex> any = adjacencyList.keySet().stream().findAny();
+    return breadthFirstTraversal(any.get().getId());
+  }
+
+  private Set<Vertex> breadthFirstTraversal(String startingNode) {
     Set<Vertex> visited = new HashSet<>();
     Queue<Vertex> nodesToExploreAdjacentNodes = new LinkedList<>();
 
@@ -61,7 +70,7 @@ public class Graph {
     return visited;
   }
 
-  public Set<Vertex> depthFirstTraversal(String startingNode) {
+  private Set<Vertex> depthFirstTraversal(String startingNode) {
     Set<Vertex> visited = new HashSet<>();
     Stack<Vertex> nodesToExplore = new Stack<>();
 
@@ -94,11 +103,6 @@ public class Graph {
 
     return startingVertex.get();
   }
-
-  public boolean hasVertex(String name) {
-    return adjacencyList.get(new Vertex(name)) != null;
-  }
-
 
   public ShortestPathResult findShortestPathAStar(String startingNode, String endingNode) throws NoPathExistsException {
     if (!hasVertex(startingNode) || !hasVertex(endingNode)) {
