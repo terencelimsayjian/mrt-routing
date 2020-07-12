@@ -140,12 +140,12 @@ class GraphTest {
 
   @Nested
   class AStarSearch {
-    private final Vertex VERTEX_1 = new Vertex("BISHAN", 1.350838988, 103.8481398, "NS17");
-    private final Vertex VERTEX_2 = new Vertex("ANG MO KIO", 1.369933175, 103.8495535, "NS16");
-    private final Vertex VERTEX_3 = new Vertex("YIO CHU KANG", 1.381756046, 103.8449439, "NS15");
+    private final Vertex VERTEX_1 = new Vertex("NS17", "BISHAN", 1.350838988, 103.8481398);
+    private final Vertex VERTEX_2 = new Vertex("NS16", "ANG MO KIO", 1.369933175, 103.8495535);
+    private final Vertex VERTEX_3 = new Vertex("NS15", "YIO CHU KANG", 1.381756046, 103.8449439);
 
     @Test
-    void name() throws Exception {
+    void shouldCalculateSimpleLinearPath() throws Exception {
       Graph graph = new Graph();
 
       graph.addVertex(VERTEX_1);
@@ -157,10 +157,10 @@ class GraphTest {
 
       ShortestPathResult actual = graph.findShortestPathAStar("BISHAN", "YIO CHU KANG");
 
-      List<String> expectedShortestPath = Arrays.asList("A", "D", "E", "F");
+      List<String> expectedShortestPath = Arrays.asList("BISHAN", "ANG MO KIO", "YIO CHU KANG");
 
       assertEquals(expectedShortestPath, actual.getShortestPath());
-      assertEquals(8, actual.getTotalCost());
+      assertEquals(6, actual.getTotalCost());
     }
   }
 

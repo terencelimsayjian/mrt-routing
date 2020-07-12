@@ -99,6 +99,7 @@ public class Graph {
     return adjacencyList.get(new Vertex(name)) != null;
   }
 
+
   public ShortestPathResult findShortestPathAStar(String startingNode, String endingNode) throws NoPathExistsException {
     if (!hasVertex(startingNode) || !hasVertex(endingNode)) {
       throw new NoSuchVertexException();
@@ -112,7 +113,7 @@ public class Graph {
   }
 
   private List<SearchResult> initialiseSearchResultsCartesianHeuristic(Vertex startingVertex, Vertex endingVertex) {
-    Set<Vertex> allVertices = breadthFirstTraversal(startingVertex.getName());
+    Set<Vertex> allVertices = breadthFirstTraversal(startingVertex.getId());
 
     List<SearchResult> searchResults = new LinkedList<>();
 
@@ -121,10 +122,8 @@ public class Graph {
       double distanceInKm = Geometry.calculateHaversineDistanceKm(new Coordinate(vertex.getLat(), vertex.getLng()), new Coordinate(endingVertex.getLat(), endingVertex.getLng()));
       double timeTakenToReachInHours = distanceInKm / MRT_SPEED_KM_H;
       int heuristicCost = (int) Math.round(timeTakenToReachInHours * 60);
-      // TODO: Consider not rounding?
 
       SearchResult searchResult = new SearchResult(vertex, heuristicCost);
-
 
       if (vertex.equals(startingVertex)) {
         searchResult.setCostToReachThisVertex(0);
@@ -132,6 +131,8 @@ public class Graph {
 
       searchResults.add(searchResult);
     }
+
+    Collections.sort(searchResults);
     return searchResults;
   }
 
@@ -186,7 +187,7 @@ public class Graph {
   }
 
   private List<SearchResult> initialiseSearchResults(Vertex startingVertex) {
-    Set<Vertex> allVertices = breadthFirstTraversal(startingVertex.getName());
+    Set<Vertex> allVertices = breadthFirstTraversal(startingVertex.getId());
     List<SearchResult> searchResults = new LinkedList<>();
 
     for (Vertex vertex : allVertices) {
@@ -203,7 +204,7 @@ public class Graph {
 
   private List<String> getShortestPath(List<SearchResult> visitedSearchResults, Vertex startingVertex, Vertex endingVertex) {
     List<String> shortestPath = new ArrayList<>();
-    shortestPath.add(endingVertex.getName());
+    shortestPath.add(endingVertex.getId());
 
     Vertex foundVertex = endingVertex;
     while (!foundVertex.equals(startingVertex)) {
@@ -211,7 +212,7 @@ public class Graph {
       SearchResult searchResult = visitedSearchResults.stream().filter(sr -> sr.getVertex().equals(finalFoundVertex)).findFirst().get();
 
       Vertex previousVertex = searchResult.getPreviousVertex();
-      shortestPath.add(previousVertex.getName());
+      shortestPath.add(previousVertex.getId());
       foundVertex = previousVertex;
     }
 
