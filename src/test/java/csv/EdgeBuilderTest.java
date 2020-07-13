@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EdgeBuilderTest {
 
   @Test
-  void read() throws FileNotFoundException {
+  void read() throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
     new EdgeBuilder().populateEdges();
   }
 
