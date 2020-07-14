@@ -1,6 +1,6 @@
-package csv;
+package traindataparser;
 
-class Edge {
+public class Edge {
   private String STATION_ID_A;
   private String STATION_ID_B;
   private String TIME_IN_MINUTES;

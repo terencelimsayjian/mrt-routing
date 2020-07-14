@@ -1,11 +1,10 @@
-package csv;
+package traindataparser;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EdgeTest {
-
   @Test
   void shouldBeEqualIfFieldsAreIdentical() {
     Edge a = new Edge("A", "B", "2");
@@ -37,4 +36,5 @@ class EdgeTest {
 
     assertFalse(a.equals(b));
   }
+
 }
