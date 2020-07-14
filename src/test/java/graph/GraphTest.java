@@ -143,9 +143,9 @@ class GraphTest {
       graph.addEdge(VERTEX_1, VERTEX_2, 2);
       graph.addEdge(VERTEX_2, VERTEX_3, 4);
 
-      ShortestPathResult actual = graph.findShortestPathAStar("BISHAN", "YIO CHU KANG");
+      ShortestPathResult actual = graph.findShortestPathAStar("NS17", "NS15");
 
-      List<String> expectedShortestPath = Arrays.asList("BISHAN", "ANG MO KIO", "YIO CHU KANG");
+      List<String> expectedShortestPath = Arrays.asList("NS17", "NS16", "NS15");
 
       assertEquals(expectedShortestPath, actual.getShortestPath());
       assertEquals(6, actual.getTotalCost());

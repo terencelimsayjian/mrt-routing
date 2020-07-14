@@ -57,7 +57,8 @@ public class Vertex {
   @Override
   public String toString() {
     return "Vertex{" +
-           "name='" + id + '\'' +
+           "id='" + id + '\'' +
+           ", displayName='" + displayName + '\'' +
            '}';
   }
 }
