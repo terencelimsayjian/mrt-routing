@@ -4,6 +4,7 @@ import geometry.Coordinate;
 import geometry.Geometry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,7 +26,8 @@ public class Graph {
     adjacencyList.put(vertex, new ArrayList<>());
   }
 
-  public void addEdge(Vertex v1, Vertex v2, int weight) {
+  public void addEdge(Vertex v1, Vertex v2, int weight, String v1Id, String v2Id) {
+    // TODO: Link with IDs only, and represent an Edge without the whole trailing Vertex (Instead just use ID)
     List<Edge> v1Edges = adjacencyList.get(v1);
     List<Edge> v2Edges = adjacencyList.get(v2);
 
@@ -41,9 +43,9 @@ public class Graph {
     return adjacencyList.get(new Vertex(id)) != null;
   }
 
-  public Set<Vertex> getAllVertices() {
-    Optional<Vertex> any = adjacencyList.keySet().stream().findAny();
-    return breadthFirstTraversal(any.get().getId());
+  public List<Vertex> getAllVertices() {
+    Vertex[] vertices = (Vertex[]) adjacencyList.keySet().toArray();
+    return Arrays.asList(vertices);
   }
 
   private Set<Vertex> breadthFirstTraversal(String startingId) {
