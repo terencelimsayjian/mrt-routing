@@ -1,6 +1,7 @@
 package traindataparser;
 
 import csv.TrainData;
+import graph.Vertex;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,28 @@ class TrainDataParserTest {
   @BeforeEach
   void setUp() {
     trainDataParser = new TrainDataParser();
+  }
+
+  @Nested
+  class BuildVertices {
+
+    @Test
+    void shouldMapTrainDataToVertices() {
+      TrainData trainData1 = new TrainData("A", "CC1", 0, 0, "CC", 1);
+      TrainData trainData2 = new TrainData("B", "CC2", 1, 1, "CC", 2);
+      TrainData trainData3 = new TrainData("C", "DD1", 2, 2, "DD", 1);
+
+      ArrayList<TrainData> trainData = new ArrayList<>();
+      trainData.add(trainData1);
+      trainData.add(trainData2);
+      trainData.add(trainData3);
+
+      List<Vertex> vertices = trainDataParser.buildVertices(trainData);
+
+      assertTrue(vertices.contains(new Vertex("CC1", "A" , 0, 0)));
+      assertTrue(vertices.contains(new Vertex("CC2", "B", 1, 1)));
+      assertTrue(vertices.contains(new Vertex("DD1", "C", 2, 2)));
+    }
   }
 
   @Nested
