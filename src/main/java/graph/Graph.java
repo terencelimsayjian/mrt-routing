@@ -37,8 +37,8 @@ public class Graph {
     v2Edges.add(new Edge(v1, weight));
   }
 
-  public boolean hasVertex(String name) {
-    return adjacencyList.get(new Vertex(name)) != null;
+  public boolean hasVertex(String id) {
+    return adjacencyList.get(new Vertex(id)) != null;
   }
 
   public Set<Vertex> getAllVertices() {
@@ -46,11 +46,11 @@ public class Graph {
     return breadthFirstTraversal(any.get().getId());
   }
 
-  private Set<Vertex> breadthFirstTraversal(String startingNode) {
+  private Set<Vertex> breadthFirstTraversal(String startingId) {
     Set<Vertex> visited = new HashSet<>();
     Queue<Vertex> nodesToExploreAdjacentNodes = new LinkedList<>();
 
-    Vertex startingVertex = getVerticeFromGraph(startingNode);
+    Vertex startingVertex = getVerticeFromGraph(startingId);
 
     nodesToExploreAdjacentNodes.add(startingVertex);
 
@@ -70,11 +70,11 @@ public class Graph {
     return visited;
   }
 
-  private Set<Vertex> depthFirstTraversal(String startingNode) {
+  private Set<Vertex> depthFirstTraversal(String startingId) {
     Set<Vertex> visited = new HashSet<>();
     Stack<Vertex> nodesToExplore = new Stack<>();
 
-    Vertex vertex = getVerticeFromGraph(startingNode);
+    Vertex vertex = getVerticeFromGraph(startingId);
 
     nodesToExplore.add(vertex);
 
@@ -94,8 +94,8 @@ public class Graph {
     return visited;
   }
 
-  private Vertex getVerticeFromGraph(String verticeName) {
-    Optional<Vertex> startingVertex = adjacencyList.keySet().stream().filter(v -> v.equals(new Vertex(verticeName))).findFirst();
+  private Vertex getVerticeFromGraph(String verticeId) {
+    Optional<Vertex> startingVertex = adjacencyList.keySet().stream().filter(v -> v.equals(new Vertex(verticeId))).findFirst();
 
     if (!startingVertex.isPresent()) {
       throw new NoSuchVertexException();
@@ -104,13 +104,13 @@ public class Graph {
     return startingVertex.get();
   }
 
-  public ShortestPathResult findShortestPathAStar(String startingNode, String endingNode) throws NoPathExistsException {
-    if (!hasVertex(startingNode) || !hasVertex(endingNode)) {
+  public ShortestPathResult findShortestPathAStar(String startingId, String endingId) throws NoPathExistsException {
+    if (!hasVertex(startingId) || !hasVertex(endingId)) {
       throw new NoSuchVertexException();
     }
 
-    Vertex startingVertex = getVerticeFromGraph(startingNode);
-    Vertex endingVertex = getVerticeFromGraph(endingNode);
+    Vertex startingVertex = getVerticeFromGraph(startingId);
+    Vertex endingVertex = getVerticeFromGraph(endingId);
 
     List<SearchResult> searchResults = initialiseSearchResultsCartesianHeuristic(startingVertex, endingVertex);
     return calculateShortestPath(startingVertex, endingVertex, searchResults);
@@ -140,14 +140,14 @@ public class Graph {
     return searchResults;
   }
 
-  public ShortestPathResult findShortestPath(String startingNode, String endingNode) throws NoPathExistsException {
+  public ShortestPathResult findShortestPath(String startingId, String endingId) throws NoPathExistsException {
     // This algorithm uses the Dijkstra algorithm to find shortest path
-    if (!hasVertex(startingNode) || !hasVertex(endingNode)) {
+    if (!hasVertex(startingId) || !hasVertex(endingId)) {
       throw new NoSuchVertexException();
     }
 
-    Vertex startingVertex = new Vertex(startingNode);
-    Vertex endingVertex = new Vertex(endingNode);
+    Vertex startingVertex = new Vertex(startingId);
+    Vertex endingVertex = new Vertex(endingId);
 
     List<SearchResult> searchResults = initialiseSearchResults(startingVertex);
     return calculateShortestPath(startingVertex, endingVertex, searchResults);
