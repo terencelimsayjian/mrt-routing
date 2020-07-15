@@ -59,8 +59,8 @@ public class Graph {
   }
 
   public List<Vertex> getAllVertices() {
-    Vertex[] vertices = (Vertex[]) adjacencyList.keySet().toArray();
-    return Arrays.asList(vertices);
+    List<Vertex> verticeList = Arrays.asList(vertices.toArray(new Vertex[vertices.size()]));
+    return new ArrayList<>(verticeList);
   }
 
   private Set<Vertex> breadthFirstTraversal(String startingId) {
@@ -134,11 +134,9 @@ public class Graph {
   }
 
   private List<SearchResult> initialiseSearchResultsCartesianHeuristic(Vertex startingVertex, Vertex endingVertex) {
-    Set<Vertex> allVertices = breadthFirstTraversal(startingVertex.getId());
-
     List<SearchResult> searchResults = new LinkedList<>();
 
-    for (Vertex vertex : allVertices) {
+    for (Vertex vertex : vertices) {
       double MRT_SPEED_KM_H = 80;
       double distanceInKm = Geometry.calculateHaversineDistanceKm(new Coordinate(vertex.getLat(), vertex.getLng()), new Coordinate(endingVertex.getLat(), endingVertex.getLng()));
       double timeTakenToReachInHours = distanceInKm / MRT_SPEED_KM_H;
@@ -208,10 +206,9 @@ public class Graph {
   }
 
   private List<SearchResult> initialiseSearchResults(Vertex startingVertex) {
-    Set<Vertex> allVertices = breadthFirstTraversal(startingVertex.getId());
     List<SearchResult> searchResults = new LinkedList<>();
 
-    for (Vertex vertex : allVertices) {
+    for (Vertex vertex : vertices) {
       SearchResult searchResult = new SearchResult(vertex);
 
       if (vertex.equals(startingVertex)) {
