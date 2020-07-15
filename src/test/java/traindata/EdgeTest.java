@@ -1,4 +1,4 @@
-package traindataparser;
+package traindata;
 
 import org.junit.jupiter.api.Test;
 

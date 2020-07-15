@@ -1,6 +1,5 @@
-package traindataparser;
+package traindata;
 
-import csv.TrainData;
 import graph.Vertex;
 
 import java.util.ArrayList;
@@ -10,14 +9,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TrainDataParser {
-  public static final int TIME_BETWEEN_INTERCHANGES = 5;
-  public static final int TIME_BETWEEN_STATIONS = 2;
+  private static final int TIME_BETWEEN_INTERCHANGES = 5;
+  private static final int TIME_BETWEEN_STATIONS = 2;
+  private final TrainDataSource trainDataSource;
 
-  public List<Vertex> buildVertices(List<TrainData> trainData) {
+  public TrainDataParser(TrainDataSource trainDataSource) {
+    this.trainDataSource = trainDataSource;
+  }
+
+  public List<Vertex> buildVertices() {
+    List<TrainData> trainData = trainDataSource.getTrainData();
+
     return trainData.stream().map(td -> new Vertex(td.getStationId(), td.getStationName(), td.getLatitude(), td.getLongitude())).collect(Collectors.toList());
   }
 
-  public List<Edge> buildEdges(List<TrainData> trainData) {
+  public List<Edge> buildEdges() {
+    List<TrainData> trainData = trainDataSource.getTrainData();
+
     Collections.sort(trainData, Comparator.comparing(TrainData::getLineCode).thenComparing(TrainData::getIndex));
 
     List<Edge> edges = new ArrayList<>();

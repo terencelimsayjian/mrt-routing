@@ -1,4 +1,4 @@
-package csv;
+package traindata;
 
 
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -9,11 +9,18 @@ import java.io.FileReader;
 import java.net.URL;
 import java.util.List;
 
-public class CsvReader {
-  public List<TrainData> getTrainDataFromCSV() throws FileNotFoundException {
+public class CsvTrainDataSource implements TrainDataSource {
+  public List<TrainData> getTrainData() {
     File trainFile = getFileFromResources("trains_sg.csv");
 
-    List<TrainData> trainData = new CsvToBeanBuilder(new FileReader(trainFile)).withType(TrainData.class).build().parse();
+    FileReader reader = null;
+    try {
+      reader = new FileReader(trainFile);
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException("Unable to load train_sg.csv file", e);
+    }
+
+    List<TrainData> trainData = new CsvToBeanBuilder(reader).withType(TrainData.class).build().parse();
 
     trainData.forEach(td -> {
       String stationId = td.getStationId();

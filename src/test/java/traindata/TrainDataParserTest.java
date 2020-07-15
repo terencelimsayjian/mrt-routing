@@ -1,6 +1,5 @@
-package traindataparser;
+package traindata;
 
-import csv.TrainData;
 import graph.Vertex;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -10,14 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class TrainDataParserTest {
 
   private TrainDataParser trainDataParser;
 
+  private CsvTrainDataSource csvTrainDataSource;
+
+
   @BeforeEach
   void setUp() {
-    trainDataParser = new TrainDataParser();
+    csvTrainDataSource = mock(CsvTrainDataSource.class);
+    trainDataParser = new TrainDataParser(csvTrainDataSource);
   }
 
   @Nested
@@ -34,7 +39,9 @@ class TrainDataParserTest {
       trainData.add(trainData2);
       trainData.add(trainData3);
 
-      List<Vertex> vertices = trainDataParser.buildVertices(trainData);
+      when(csvTrainDataSource.getTrainData()).thenReturn(trainData);
+
+      List<Vertex> vertices = trainDataParser.buildVertices();
 
       assertTrue(vertices.contains(new Vertex("CC1", "A" , 0, 0)));
       assertTrue(vertices.contains(new Vertex("CC2", "B", 1, 1)));
@@ -55,7 +62,9 @@ class TrainDataParserTest {
       trainData.add(trainData2);
       trainData.add(trainData3);
 
-      List<Edge> edges = trainDataParser.buildEdges(trainData);
+      when(csvTrainDataSource.getTrainData()).thenReturn(trainData);
+
+      List<Edge> edges = trainDataParser.buildEdges();
 
       Edge edge1 = new Edge("CC1", "DD1", 5);
       Edge edge2 = new Edge("DD1", "EE1", 5);
@@ -77,7 +86,9 @@ class TrainDataParserTest {
       trainData.add(trainData2);
       trainData.add(trainData3);
 
-      List<Edge> edges = trainDataParser.buildEdges(trainData);
+      when(csvTrainDataSource.getTrainData()).thenReturn(trainData);
+
+      List<Edge> edges = trainDataParser.buildEdges();
 
       Edge edge1 = new Edge("CC1", "CC2", 2);
       Edge edge2 = new Edge("CC2", "CC3", 2);
@@ -89,7 +100,7 @@ class TrainDataParserTest {
     class EdgeCases {
       @Test
       void handleSTCLRTConnections() {
-        List<Edge> edges = trainDataParser.buildEdges(new ArrayList<>());
+        List<Edge> edges = trainDataParser.buildEdges();
         Edge edge1 = new Edge("STC", "SE1", 2);
         Edge edge2 = new Edge("STC", "SE5", 2);
         Edge edge3 = new Edge("STC", "SW1", 2);
@@ -103,7 +114,7 @@ class TrainDataParserTest {
 
       @Test
       void handlePTCLRTConnections() {
-        List<Edge> edges = trainDataParser.buildEdges(new ArrayList<>());
+        List<Edge> edges = trainDataParser.buildEdges();
         Edge edge1 = new Edge("PTC", "PE1", 2);
         Edge edge2 = new Edge("PTC", "PE7", 2);
         Edge edge3 = new Edge("PTC", "PW1", 2);
@@ -117,7 +128,7 @@ class TrainDataParserTest {
 
       @Test
       void handleTanahMerahToExpoFork() {
-        List<Edge> edges = trainDataParser.buildEdges(new ArrayList<>());
+        List<Edge> edges = trainDataParser.buildEdges();
         Edge edge = new Edge("EW4", "CG1", 2);
 
         assertTrue(edges.contains(edge));
@@ -125,7 +136,7 @@ class TrainDataParserTest {
 
       @Test
       void handlePromenadeToBayfrontFork() {
-        List<Edge> edges = trainDataParser.buildEdges(new ArrayList<>());
+        List<Edge> edges = trainDataParser.buildEdges();
         Edge edge = new Edge("CC4", "CE1", 2);
 
         assertTrue(edges.contains(edge));

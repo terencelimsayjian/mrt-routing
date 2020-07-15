@@ -1,4 +1,4 @@
-package traindataparser;
+package traindata;
 
 public class Edge {
   private String STATION_ID_A;

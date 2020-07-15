@@ -1,4 +1,4 @@
-package csv;
+package traindata;
 
 import com.opencsv.bean.CsvBindByName;
 
