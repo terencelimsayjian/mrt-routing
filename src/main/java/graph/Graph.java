@@ -17,26 +17,41 @@ import java.util.Stack;
 
 public class Graph {
   private HashMap<Vertex, List<Edge>> adjacencyList;
+  private Set<Vertex> vertices;
 
   public Graph() {
     adjacencyList = new HashMap<>();
+    vertices = new HashSet<>();
   }
 
   public void addVertex(Vertex vertex) {
+    if (vertices.contains(vertex)) {
+      throw new VertexAlreadyExistsException();
+    }
+
+    vertices.add(vertex);
     adjacencyList.put(vertex, new ArrayList<>());
   }
 
-  public void addEdge(Vertex v1, Vertex v2, int weight, String v1Id, String v2Id) {
-    // TODO: Link with IDs only, and represent an Edge without the whole trailing Vertex (Instead just use ID)
-    List<Edge> v1Edges = adjacencyList.get(v1);
-    List<Edge> v2Edges = adjacencyList.get(v2);
+  public void addEdge(String v1Id, String v2Id, int weight) {
+    Optional<Vertex> optionalFirstVertice = vertices.stream().filter(v -> v.equals(new Vertex(v1Id))).findFirst();
+    Optional<Vertex> optionalSecondVertice = vertices.stream().filter(v -> v.equals(new Vertex(v2Id))).findFirst();
+    if (!optionalFirstVertice.isPresent() || !optionalSecondVertice.isPresent()) {
+      throw new NoSuchVertexException();
+    }
+
+    Vertex vv1 = optionalFirstVertice.get();
+    Vertex vv2 = optionalSecondVertice.get();
+
+    List<Edge> v1Edges = adjacencyList.get(vv1);
+    List<Edge> v2Edges = adjacencyList.get(vv2);
 
     if (v1Edges == null || v2Edges == null) {
       throw new NoSuchVertexException();
     }
 
-    v1Edges.add(new Edge(v2, weight));
-    v2Edges.add(new Edge(v1, weight));
+    v1Edges.add(new Edge(vv2, weight));
+    v2Edges.add(new Edge(vv1, weight));
   }
 
   public boolean hasVertex(String id) {

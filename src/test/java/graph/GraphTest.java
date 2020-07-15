@@ -1,6 +1,5 @@
 package graph;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +9,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GraphTest {
-  private Graph graph;
   public static final Vertex VERTEX_A = new Vertex("A");
   public static final Vertex VERTEX_B = new Vertex("B");
   public static final Vertex VERTEX_C = new Vertex("C");
@@ -18,18 +16,28 @@ class GraphTest {
   public static final Vertex VERTEX_E = new Vertex("E");
   public static final Vertex VERTEX_F = new Vertex("F");
 
-  @BeforeEach
-  void setUp() {
-    graph = new Graph();
+  @Test
+  void shouldThrowExceptionWhenTryingToAddVertexThatAlreadyExists() {
+    Graph graph = new Graph();
     graph.addVertex(VERTEX_A);
-    graph.addVertex(VERTEX_B);
-    graph.addVertex(VERTEX_C);
-    graph.addVertex(VERTEX_D);
 
-    graph.addEdge(VERTEX_A, VERTEX_B, 1, VERTEX_A.getId(), VERTEX_B.getId());
-    graph.addEdge(VERTEX_A, VERTEX_C, 1, VERTEX_A.getId(), VERTEX_C.getId());
-    graph.addEdge(VERTEX_A, VERTEX_D, 1, VERTEX_A.getId(), VERTEX_D.getId());
-    graph.addEdge(VERTEX_B, VERTEX_C, 1, VERTEX_B.getId(), VERTEX_C.getId());
+    assertThrows(VertexAlreadyExistsException.class, () -> graph.addVertex(VERTEX_A));
+  }
+
+  @Test
+  void shouldThrowNoSuchVertexExceptionWhenTryingToAddEdgeAndTheFirstVertexDoesntExist() {
+    Graph graph = new Graph();
+    graph.addVertex(VERTEX_A);
+
+    assertThrows(NoSuchVertexException.class, () -> graph.addEdge(VERTEX_B.getId(), VERTEX_A.getId(), 2));
+  }
+
+  @Test
+  void shouldThrowNoSuchVertexExceptionWhenTryingToAddEdgeAndTheSecondVertexDoesntExist() {
+    Graph graph = new Graph();
+    graph.addVertex(VERTEX_B);
+
+    assertThrows(NoSuchVertexException.class, () -> graph.addEdge(VERTEX_B.getId(), VERTEX_A.getId(), 2));
   }
 
   @Nested
@@ -65,8 +73,8 @@ class GraphTest {
       graph.addVertex(VERTEX_B);
       graph.addVertex(VERTEX_C);
 
-      graph.addEdge(VERTEX_A, VERTEX_B, 1, VERTEX_A.getId(), VERTEX_B.getId());
-      graph.addEdge(VERTEX_B, VERTEX_C, 1, VERTEX_B.getId(), VERTEX_C.getId());
+      graph.addEdge(VERTEX_A.getId(), VERTEX_B.getId(), 1);
+      graph.addEdge(VERTEX_B.getId(), VERTEX_C.getId(), 1);
 
       ShortestPathResult actual = graph.findShortestPath("A", "C");
 
@@ -85,10 +93,10 @@ class GraphTest {
       graph.addVertex(VERTEX_C);
       graph.addVertex(VERTEX_D);
 
-      graph.addEdge(VERTEX_A, VERTEX_B, 5, VERTEX_A.getId(), VERTEX_B.getId());
-      graph.addEdge(VERTEX_A, VERTEX_C, 2, VERTEX_A.getId(), VERTEX_C.getId());
-      graph.addEdge(VERTEX_C, VERTEX_D, 8, VERTEX_C.getId(), VERTEX_D.getId());
-      graph.addEdge(VERTEX_B, VERTEX_D, 1, VERTEX_B.getId(), VERTEX_D.getId());
+      graph.addEdge(VERTEX_A.getId(), VERTEX_B.getId(), 5);
+      graph.addEdge(VERTEX_A.getId(), VERTEX_C.getId(), 2);
+      graph.addEdge(VERTEX_C.getId(), VERTEX_D.getId(), 8);
+      graph.addEdge(VERTEX_B.getId(), VERTEX_D.getId(), 1);
 
       ShortestPathResult actual = graph.findShortestPath("A", "D");
 
@@ -109,13 +117,13 @@ class GraphTest {
       graph.addVertex(VERTEX_E);
       graph.addVertex(VERTEX_F);
 
-      graph.addEdge(VERTEX_A, VERTEX_B, 6, VERTEX_A.getId(), VERTEX_B.getId());
-      graph.addEdge(VERTEX_A, VERTEX_C, 5, VERTEX_A.getId(), VERTEX_C.getId());
-      graph.addEdge(VERTEX_A, VERTEX_D, 4, VERTEX_A.getId(), VERTEX_D.getId());
-      graph.addEdge(VERTEX_C, VERTEX_E, 2, VERTEX_C.getId(), VERTEX_E.getId());
-      graph.addEdge(VERTEX_B, VERTEX_E, 9, VERTEX_B.getId(), VERTEX_E.getId());
-      graph.addEdge(VERTEX_D, VERTEX_E, 2, VERTEX_D.getId(), VERTEX_E.getId());
-      graph.addEdge(VERTEX_E, VERTEX_F, 2, VERTEX_E.getId(), VERTEX_F.getId());
+      graph.addEdge(VERTEX_A.getId(), VERTEX_B.getId(), 6);
+      graph.addEdge(VERTEX_A.getId(), VERTEX_C.getId(), 5);
+      graph.addEdge(VERTEX_A.getId(), VERTEX_D.getId(), 4);
+      graph.addEdge(VERTEX_C.getId(), VERTEX_E.getId(), 2);
+      graph.addEdge(VERTEX_B.getId(), VERTEX_E.getId(), 9);
+      graph.addEdge(VERTEX_D.getId(), VERTEX_E.getId(), 2);
+      graph.addEdge(VERTEX_E.getId(), VERTEX_F.getId(), 2);
 
       ShortestPathResult actual = graph.findShortestPath("A", "F");
 
@@ -140,8 +148,8 @@ class GraphTest {
       graph.addVertex(VERTEX_2);
       graph.addVertex(VERTEX_3);
 
-      graph.addEdge(VERTEX_1, VERTEX_2, 2, VERTEX_1.getId(), VERTEX_2.getId());
-      graph.addEdge(VERTEX_2, VERTEX_3, 4, VERTEX_2.getId(), VERTEX_3.getId());
+      graph.addEdge(VERTEX_1.getId(), VERTEX_2.getId(), 2);
+      graph.addEdge(VERTEX_2.getId(), VERTEX_3.getId(), 4);
 
       ShortestPathResult actual = graph.findShortestPathAStar("NS17", "NS15");
 
