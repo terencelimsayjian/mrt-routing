@@ -3,6 +3,10 @@ package traindata;
 import com.opencsv.bean.CsvBindByName;
 
 public class TrainData {
+
+  public TrainData() {
+  }
+
   public TrainData(String stationName, String stationId, double latitude, double longitude, String lineCode, int index) {
     this.stationName = stationName;
     this.stationId = stationId;

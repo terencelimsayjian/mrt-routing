@@ -2,6 +2,7 @@ package traindata;
 
 
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.exceptions.CsvBeanIntrospectionException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +21,12 @@ public class CsvTrainDataSource implements TrainDataSource {
       throw new RuntimeException("Unable to load train_sg.csv file", e);
     }
 
-    List<TrainData> trainData = new CsvToBeanBuilder(reader).withType(TrainData.class).build().parse();
+    List<TrainData> trainData = null;
+    try {
+      trainData = new CsvToBeanBuilder(reader).withType(TrainData.class).build().parse();
+    } catch (CsvBeanIntrospectionException e) {
+      e.printStackTrace();
+    }
 
     trainData.forEach(td -> {
       String stationId = td.getStationId();
@@ -33,7 +39,6 @@ public class CsvTrainDataSource implements TrainDataSource {
         stationIntIndex = Integer.parseInt(stationIndex);
       } catch (NumberFormatException e) {
         // To handle stations that don't adhere to naming conventions AA11, namely STC and PTC
-        System.out.println(td.getStationId());
       }
 
       td.setLineCode(lineCode);

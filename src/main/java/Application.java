@@ -1,29 +1,41 @@
+import graph.Graph;
+import graph.NoPathExistsException;
+import graph.ShortestPathResult;
+import graph.Vertex;
 import traindata.CsvTrainDataSource;
-import traindata.TrainData;
+import traindata.Edge;
+import traindata.TrainDataParser;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 public class Application {
-  public static void main(String[] args) throws FileNotFoundException {
+  public static void main(String[] args) {
 
 
-    List<TrainData> trainDataFromCSV = new CsvTrainDataSource().getTrainData();
+    TrainDataParser trainDataParser = new TrainDataParser(new CsvTrainDataSource());
 
-//    TrainDataParser trainDataParser = new TrainDataParser();
+    List<Vertex> vertices = trainDataParser.buildVertices();
+    List<Edge> edges = trainDataParser.buildEdges();
 
-//    List<Vertex> vertices = trainDataParser.buildVertices(trainDataFromCSV);
-//    List<Edge> edges = trainDataParser.buildEdges(trainDataFromCSV);
-//
-//    Graph graph = new Graph();
-//
-//    vertices.forEach(v -> graph.addVertex(v));
-//    edges.forEach(e -> graph.addEdge());
+    Graph graph = new Graph();
+    vertices.forEach(graph::addVertex);
+    edges.forEach(e -> graph.addEdge(e.getStationIdA(), e.getStationIdB(), e.getTimeInMinutes()));
 
-    // Get train data from CSV
-    // Build vertices
-    // Build edges
-    // Change API to add edges as ID?
+    try {
+      ShortestPathResult shortestPathAStar = graph.findShortestPathAStar("NS19", "NE8");
+
+      List<String> shortestPath = shortestPathAStar.getShortestPath();
+      Integer numberOfExploredNodes = shortestPathAStar.getNumberOfExploredNodes();
+      Integer totalCost = shortestPathAStar.getTotalCost();
+
+      System.out.println("Shortest Path: " + shortestPath);
+      System.out.println("Number of explored nodes: " + numberOfExploredNodes);
+      System.out.println("Total cost: " + totalCost);
+    } catch (NoPathExistsException e) {
+      e.printStackTrace();
+    }
+
+
 
 
   }
