@@ -97,6 +97,7 @@ class TrainDataParserTest {
       assertTrue(edges.contains(edge2));
     }
 
+    @Nested
     class EdgeCases {
       @Test
       void handleSTCLRTConnections() {
@@ -140,6 +141,50 @@ class TrainDataParserTest {
         Edge edge = new Edge("CC4", "CE1", 2);
 
         assertTrue(edges.contains(edge));
+      }
+
+      @Test
+      void shouldConnectNS5ToNS7() {
+        TrainData trainData1 = new TrainData("A", "NS5", 0, 0, "CC", 5);
+        TrainData trainData2 = new TrainData("B", "NS7", 0, 0, "CC", 7);
+        TrainData trainData3 = new TrainData("C", "NS8", 0, 0, "CC", 8);
+
+        ArrayList<TrainData> trainData = new ArrayList<>();
+        trainData.add(trainData1);
+        trainData.add(trainData2);
+        trainData.add(trainData3);
+
+        when(csvTrainDataSource.getTrainData()).thenReturn(trainData);
+
+        List<Edge> edges = trainDataParser.buildEdges();
+
+        Edge edge1 = new Edge("NS5", "NS7", 2);
+        Edge edge2 = new Edge("NS7", "NS8", 2);
+
+        assertTrue(edges.contains(edge1));
+        assertTrue(edges.contains(edge2));
+      }
+
+      @Test
+      void shouldConnectNE1ToNE3() {
+        TrainData trainData1 = new TrainData("A", "NE1", 0, 0, "CC", 1);
+        TrainData trainData2 = new TrainData("B", "NE3", 0, 0, "CC", 3);
+        TrainData trainData3 = new TrainData("C", "NE4", 0, 0, "CC", 4);
+
+        ArrayList<TrainData> trainData = new ArrayList<>();
+        trainData.add(trainData1);
+        trainData.add(trainData2);
+        trainData.add(trainData3);
+
+        when(csvTrainDataSource.getTrainData()).thenReturn(trainData);
+
+        List<Edge> edges = trainDataParser.buildEdges();
+
+        Edge edge1 = new Edge("NE1", "NE3", 2);
+        Edge edge2 = new Edge("NE3", "NE4", 2);
+
+        assertTrue(edges.contains(edge1));
+        assertTrue(edges.contains(edge2));
       }
     }
 

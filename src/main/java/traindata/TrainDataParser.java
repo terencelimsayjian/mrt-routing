@@ -56,6 +56,11 @@ public class TrainDataParser {
         continue;
       }
 
+      if (originalTrainData.getStationId().equals("NS5")) {
+        edges.add(new Edge(originalTrainData.getStationId(), "NS7", TIME_BETWEEN_STATIONS));
+        continue;
+      }
+
       trainData
           .stream()
           .filter(td -> td.getLineCode().equals(lineCode) && td.getIndex() == index + 1)
