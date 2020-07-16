@@ -7,11 +7,79 @@ import traindata.Edge;
 import traindata.TrainDataParser;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class Application {
   public static void main(String[] args) {
+    Graph graph = initialiseMrtMap();
 
+    Scanner scanner = new Scanner(System.in);
 
+    System.out.println("Welcome to Singapore's MRT!");
+
+    String continueAsking = "y";
+    while (!continueAsking.equals("N")) {
+
+      String startingStationId = getStationIdFromInput(graph, scanner, "starting");
+      String endingStationId = getStationIdFromInput(graph, scanner, "ending");
+
+      try {
+        System.out.println("Finding path from " + startingStationId + " to " + endingStationId);
+        ShortestPathResult shortestPathAStar = graph.findShortestPathAStar(startingStationId, endingStationId);
+
+        List<String> shortestPath = shortestPathAStar.getShortestPath();
+        Integer numberOfExploredNodes = shortestPathAStar.getNumberOfExploredNodes();
+        Integer totalCost = shortestPathAStar.getTotalCost();
+
+        System.out.println("Shortest Path: " + shortestPath);
+        System.out.println("Number of explored nodes: " + numberOfExploredNodes);
+        System.out.println("Total cost: " + totalCost);
+      } catch (NoPathExistsException e) {
+        // This is not a recoverable exception from users perspective, as all the trains are connected
+        System.out.println("Something went wrong; No path found");
+      }
+
+      System.out.println("Would you like to try again? [y/N]");
+      continueAsking = scanner.next();
+
+    }
+
+    // North South Line
+    // [NL1] Name of station
+    // [NL2] Name of station
+    // East West Line
+    // North East Line
+    // Circle Line
+    // Downtown Line
+    // Thomson-East Coast Line
+    // Bukit Panjang LRT
+    // Sengkang LRT
+    // Punggol LRT
+
+    // Instructions
+    // Continue along line CC1 -> CC9 x total minutes
+    // Change at interchange CC9 -> DL8 x minutes
+    // Continue along line DL8 -> DL19 x total minutes
+  }
+
+  private static String getStationIdFromInput(Graph graph, Scanner scanner, String stationLabel) {
+    boolean isError = true;
+    String startingStationId = null;
+
+    while (isError) {
+      System.out.println("Enter " + stationLabel + " Station ID or Name: ");
+      startingStationId = scanner.next();
+
+      if (graph.hasVertex(startingStationId)) {
+        isError = false;
+      } else {
+        System.out.println("That station does not exist, please try again.");
+      }
+    }
+    return startingStationId;
+  }
+
+  private static Graph initialiseMrtMap() {
     TrainDataParser trainDataParser = new TrainDataParser(new CsvTrainDataSource());
 
     List<Vertex> vertices = trainDataParser.buildVertices();
@@ -20,23 +88,6 @@ public class Application {
     Graph graph = new Graph();
     vertices.forEach(graph::addVertex);
     edges.forEach(e -> graph.addEdge(e.getStationIdA(), e.getStationIdB(), e.getTimeInMinutes()));
-
-    try {
-      ShortestPathResult shortestPathAStar = graph.findShortestPathAStar("NS19", "NE8");
-
-      List<String> shortestPath = shortestPathAStar.getShortestPath();
-      Integer numberOfExploredNodes = shortestPathAStar.getNumberOfExploredNodes();
-      Integer totalCost = shortestPathAStar.getTotalCost();
-
-      System.out.println("Shortest Path: " + shortestPath);
-      System.out.println("Number of explored nodes: " + numberOfExploredNodes);
-      System.out.println("Total cost: " + totalCost);
-    } catch (NoPathExistsException e) {
-      e.printStackTrace();
-    }
-
-
-
-
+    return graph;
   }
 }

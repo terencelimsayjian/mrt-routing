@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,6 +39,23 @@ class GraphTest {
     graph.addVertex(VERTEX_B);
 
     assertThrows(NoSuchVertexException.class, () -> graph.addEdge(VERTEX_B.getId(), VERTEX_A.getId(), 2));
+  }
+
+  @Test
+  void shouldGetVertex() {
+    Graph graph = new Graph();
+    graph.addVertex(VERTEX_A);
+
+    Optional<Vertex> a = graph.getVertex("A");
+    assertTrue(a.isPresent());
+  }
+
+  @Test
+  void shouldReturnEmptyOptionalIfDoesNotExist() {
+    Graph graph = new Graph();
+    Optional<Vertex> a = graph.getVertex("A");
+
+    assertFalse(a.isPresent());
   }
 
   @Nested

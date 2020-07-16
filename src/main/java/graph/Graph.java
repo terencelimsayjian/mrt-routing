@@ -58,6 +58,10 @@ public class Graph {
     return adjacencyList.get(new Vertex(id)) != null;
   }
 
+  public Optional<Vertex> getVertex(String id) {
+    return vertices.stream().filter(v -> v.equals(new Vertex(id))).findFirst();
+  }
+
   public List<Vertex> getAllVertices() {
     List<Vertex> verticeList = Arrays.asList(vertices.toArray(new Vertex[vertices.size()]));
     return new ArrayList<>(verticeList);
