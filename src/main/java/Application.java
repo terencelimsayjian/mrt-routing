@@ -44,6 +44,17 @@ public class Application {
 
     }
 
+    // TODO:
+    // 1. Print table
+    //    a. Convert the lines into ENUM
+    // 2. Print results
+    //    a. Make get shortest path return vertices
+
+
+    // OR map over search results, to find vertex
+    // For each vertex except the last, find the edge that connects v1 to v2, and get the cost
+    // OR add a decorated Vertex with field costToReachThisVertex
+
     // North South Line
     // [NL1] Name of station
     // [NL2] Name of station

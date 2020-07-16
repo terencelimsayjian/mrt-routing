@@ -182,7 +182,8 @@ public class Graph {
       Vertex selectedVertex = selectedSearchResult.getVertex();
       if (selectedVertex.equals(endingVertex)) {
         List<String> shortestPath = getShortestPath(visitedSearchResults, startingVertex, endingVertex);
-        return new ShortestPathResult(shortestPath, selectedSearchResult.getCostToReachThisVertex(), (int) visitedSearchResults.size());
+        List<Vertex> shortestPathVertices = getShortestPathVertices(visitedSearchResults, startingVertex, endingVertex);
+        return new ShortestPathResult(shortestPath, selectedSearchResult.getCostToReachThisVertex(), (int) visitedSearchResults.size(), shortestPathVertices);
       }
 
       List<Edge> edges = adjacencyList.get(selectedVertex);
@@ -235,6 +236,25 @@ public class Graph {
 
       Vertex previousVertex = searchResult.getPreviousVertex();
       shortestPath.add(previousVertex.getId());
+      foundVertex = previousVertex;
+    }
+
+    Collections.reverse(shortestPath);
+    return shortestPath;
+  }
+
+  private List<Vertex> getShortestPathVertices(List<SearchResult> visitedSearchResults, Vertex startingVertex, Vertex endingVertex) {
+    List<Vertex> shortestPath = new ArrayList<>();
+    shortestPath.add(endingVertex);
+
+    // TODO: Add costToReachVertex
+    Vertex foundVertex = endingVertex;
+    while (!foundVertex.equals(startingVertex)) {
+      Vertex finalFoundVertex = foundVertex;
+      SearchResult searchResult = visitedSearchResults.stream().filter(sr -> sr.getVertex().equals(finalFoundVertex)).findFirst().get();
+
+      Vertex previousVertex = searchResult.getPreviousVertex();
+      shortestPath.add(previousVertex);
       foundVertex = previousVertex;
     }
 
