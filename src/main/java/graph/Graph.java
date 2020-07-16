@@ -62,6 +62,25 @@ public class Graph {
     return vertices.stream().filter(v -> v.equals(new Vertex(id))).findFirst();
   }
 
+  public int getCost(String startingId, String endingId) {
+    Optional<Vertex> v1 = getVertex(startingId);
+    Optional<Vertex> v2 = getVertex(endingId);
+
+    if (!v1.isPresent() || !v2.isPresent()) {
+      throw new NoSuchVertexException();
+    }
+
+    List<Edge> edges = adjacencyList.get(v1.get());
+
+    Optional<Edge> foundEdge = edges.stream().filter(e -> e.getTrailingVertex().equals(v2.get())).findFirst();
+
+    if (!foundEdge.isPresent()) {
+      throw new NoSuchEdgeException();
+    }
+
+    return foundEdge.get().getWeight();
+  }
+
   public List<Vertex> getAllVertices() {
     List<Vertex> verticeList = Arrays.asList(vertices.toArray(new Vertex[vertices.size()]));
     return new ArrayList<>(verticeList);
@@ -247,7 +266,6 @@ public class Graph {
     List<Vertex> shortestPath = new ArrayList<>();
     shortestPath.add(endingVertex);
 
-    // TODO: Add costToReachVertex
     Vertex foundVertex = endingVertex;
     while (!foundVertex.equals(startingVertex)) {
       Vertex finalFoundVertex = foundVertex;
@@ -258,6 +276,7 @@ public class Graph {
       foundVertex = previousVertex;
     }
 
+    // TODO: Add costToReachVertex
     Collections.reverse(shortestPath);
     return shortestPath;
   }

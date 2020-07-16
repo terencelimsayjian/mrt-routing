@@ -58,6 +58,25 @@ class GraphTest {
     assertFalse(a.isPresent());
   }
 
+  @Test
+  void shouldReturnCostBetweenTwoEdges() {
+    Graph graph = new Graph();
+    graph.addVertex(VERTEX_A);
+    graph.addVertex(VERTEX_B);
+    graph.addEdge(VERTEX_A.getId(), VERTEX_B.getId(), 2);
+
+    assertEquals(2, graph.getCost(VERTEX_A.getId(), VERTEX_B.getId()));
+  }
+
+  @Test
+  void shouldThrowNoSuchEdgeExceptionIfEdgeDoesNotExist() {
+    Graph graph = new Graph();
+    graph.addVertex(VERTEX_A);
+    graph.addVertex(VERTEX_B);
+
+    assertThrows(NoSuchEdgeException.class, () -> graph.getCost(VERTEX_A.getId(), VERTEX_B.getId()));
+  }
+
   @Nested
   class FindShortestPathDijkstra {
     @Test
