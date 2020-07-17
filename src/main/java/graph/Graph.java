@@ -69,6 +69,14 @@ public class Graph {
     return vertices.stream().filter(v -> v.equals(new Vertex(id))).findFirst();
   }
 
+  public Optional<Vertex> findById(String id) {
+    if (searchIndexById.get(id) != null) {
+      return Optional.of(searchIndexById.get(id));
+    }
+
+    return Optional.empty();
+  }
+
   public Optional<Vertex> findByIdOrName(String idOrName) {
     if (searchIndexById.get(idOrName) != null) {
       return Optional.of(searchIndexById.get(idOrName));

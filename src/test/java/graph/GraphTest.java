@@ -77,26 +77,55 @@ class GraphTest {
     assertThrows(NoSuchEdgeException.class, () -> graph.getCost(VERTEX_A.getId(), VERTEX_B.getId()));
   }
 
-  @Test
-  void shouldReturnVertexWhenSearchingById() {
-    Graph graph = new Graph();
-    Vertex vertexA = new Vertex("A", "station_a", 0, 0);
-    graph.addVertex(vertexA);
+  @Nested
+  class SearchFunctions {
+    private final Vertex vertexA = new Vertex("A", "station_a", 0, 0);
 
-    Optional<Vertex> a = graph.findByIdOrName("station_a");
+    @Test
+    void findByIdShouldReturnVertex() {
+      Graph graph = new Graph();
+      graph.addVertex(vertexA);
 
-    assertEquals(vertexA, a.get());
-  }
+      Optional<Vertex> a = graph.findById("A");
+      assertEquals(vertexA, a.get());
+    }
 
-  @Test
-  void shouldReturnVertexWhenSearchingByName() {
-    Graph graph = new Graph();
-    Vertex vertexA = new Vertex("A", "station_a", 0, 0);
-    graph.addVertex(vertexA);
+    @Test
+    void findByIdShouldReturnEmptyOptionalIfNotExist() {
+      Graph graph = new Graph();
+      graph.addVertex(vertexA);
 
-    Optional<Vertex> a = graph.findByIdOrName("A");
+      Optional<Vertex> a = graph.findById("B");
+      assertFalse(a.isPresent());
+    }
 
-    assertEquals(vertexA, a.get());
+    @Test
+    void findByNameOrIdShouldReturnVertexWhenSearchingById() {
+      Graph graph = new Graph();
+      graph.addVertex(vertexA);
+
+      Optional<Vertex> a = graph.findByIdOrName("station_a");
+      assertEquals(vertexA, a.get());
+    }
+
+    @Test
+    void findByNameOrIdShouldReturnVertexWhenSearchingByName() {
+      Graph graph = new Graph();
+      graph.addVertex(vertexA);
+
+      Optional<Vertex> a = graph.findByIdOrName("A");
+      assertEquals(vertexA, a.get());
+    }
+
+    @Test
+    void findByNameOrIdShouldReturnEmptyOptionalIfNotExist() {
+      Graph graph = new Graph();
+      graph.addVertex(vertexA);
+
+      Optional<Vertex> a = graph.findByIdOrName("B");
+      assertFalse(a.isPresent());
+    }
+
   }
 
   @Nested
