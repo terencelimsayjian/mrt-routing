@@ -30,9 +30,9 @@ class TrainDataParserTest {
 
     @Test
     void shouldMapTrainDataToVertices() {
-      TrainData trainData1 = new TrainData("A", "CC1", 0, 0, "CC", 1);
-      TrainData trainData2 = new TrainData("B", "CC2", 1, 1, "CC", 2);
-      TrainData trainData3 = new TrainData("C", "DD1", 2, 2, "DD", 1);
+      TrainData trainData1 = new TrainData("A", "CC1", 0, 0, "NS", "CC", 1);
+      TrainData trainData2 = new TrainData("B", "CC2", 1, 1, "NS", "CC", 2);
+      TrainData trainData3 = new TrainData("C", "DD1", 2, 2, "NS", "DD", 1);
 
       ArrayList<TrainData> trainData = new ArrayList<>();
       trainData.add(trainData1);
@@ -43,9 +43,9 @@ class TrainDataParserTest {
 
       List<Vertex> vertices = trainDataParser.buildVertices();
 
-      assertTrue(vertices.contains(new Vertex("CC1", "A" , 0, 0)));
-      assertTrue(vertices.contains(new Vertex("CC2", "B", 1, 1)));
-      assertTrue(vertices.contains(new Vertex("DD1", "C", 2, 2)));
+      assertTrue(vertices.contains(new Vertex("CC1", "A", "NS", 0, 0)));
+      assertTrue(vertices.contains(new Vertex("CC2", "B", "NS", 1, 1)));
+      assertTrue(vertices.contains(new Vertex("DD1", "C", "NS", 2, 2)));
     }
   }
 
@@ -53,9 +53,9 @@ class TrainDataParserTest {
   class BuildEdges {
     @Test
     void shouldPopulateDuplicateTrainDataWithDifferentIdsAsInterchanges() {
-      TrainData trainData1 = new TrainData("A", "CC1", 0, 0, "CC", 1);
-      TrainData trainData2 = new TrainData("A", "DD1", 0, 0, "DD", 1);
-      TrainData trainData3 = new TrainData("A", "EE1", 0, 0, "EE", 1);
+      TrainData trainData1 = new TrainData("A", "CC1", 0, 0, "NS", "CC", 1);
+      TrainData trainData2 = new TrainData("A", "DD1", 0, 0, "NS", "DD", 1);
+      TrainData trainData3 = new TrainData("A", "EE1", 0, 0, "NS", "EE", 1);
 
       ArrayList<TrainData> trainData = new ArrayList<>();
       trainData.add(trainData1);
@@ -77,9 +77,9 @@ class TrainDataParserTest {
 
     @Test
     void shouldPopulateTrainDataWithSameLineCodeAsASingleTrack() {
-      TrainData trainData1 = new TrainData("A", "CC1", 0, 0, "CC", 1);
-      TrainData trainData2 = new TrainData("B", "CC2", 0, 0, "CC", 2);
-      TrainData trainData3 = new TrainData("C", "CC3", 0, 0, "CC", 3);
+      TrainData trainData1 = new TrainData("A", "CC1", 0, 0, "NS", "CC", 1);
+      TrainData trainData2 = new TrainData("B", "CC2", 0, 0, "NS", "CC", 2);
+      TrainData trainData3 = new TrainData("C", "CC3", 0, 0, "NS", "CC", 3);
 
       ArrayList<TrainData> trainData = new ArrayList<>();
       trainData.add(trainData1);
@@ -145,9 +145,9 @@ class TrainDataParserTest {
 
       @Test
       void shouldConnectNS5ToNS7() {
-        TrainData trainData1 = new TrainData("A", "NS5", 0, 0, "CC", 5);
-        TrainData trainData2 = new TrainData("B", "NS7", 0, 0, "CC", 7);
-        TrainData trainData3 = new TrainData("C", "NS8", 0, 0, "CC", 8);
+        TrainData trainData1 = new TrainData("A", "NS5", 0, 0, "NS", "CC", 5);
+        TrainData trainData2 = new TrainData("B", "NS7", 0, 0, "NS", "CC", 7);
+        TrainData trainData3 = new TrainData("C", "NS8", 0, 0, "NS", "CC", 8);
 
         ArrayList<TrainData> trainData = new ArrayList<>();
         trainData.add(trainData1);
@@ -167,9 +167,9 @@ class TrainDataParserTest {
 
       @Test
       void shouldConnectNE1ToNE3() {
-        TrainData trainData1 = new TrainData("A", "NE1", 0, 0, "CC", 1);
-        TrainData trainData2 = new TrainData("B", "NE3", 0, 0, "CC", 3);
-        TrainData trainData3 = new TrainData("C", "NE4", 0, 0, "CC", 4);
+        TrainData trainData1 = new TrainData("A", "NE1", 0, 0, "NS", "CC", 1);
+        TrainData trainData2 = new TrainData("B", "NE3", 0, 0, "NS", "CC", 3);
+        TrainData trainData3 = new TrainData("C", "NE4", 0, 0, "NS", "CC", 4);
 
         ArrayList<TrainData> trainData = new ArrayList<>();
         trainData.add(trainData1);

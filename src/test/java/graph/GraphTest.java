@@ -62,7 +62,7 @@ class GraphTest {
 
   @Nested
   class SearchFunctions {
-    private final Vertex vertexA = new Vertex("A", "station_a", 0, 0);
+    private final Vertex vertexA = new Vertex("A", "station_a", "NS", 0, 0);
 
     @Test
     void findByIdShouldReturnVertex() {
@@ -207,9 +207,9 @@ class GraphTest {
 
   @Nested
   class AStarSearch {
-    private final Vertex VERTEX_1 = new Vertex("NS17", "BISHAN", 1.350838988, 103.8481398);
-    private final Vertex VERTEX_2 = new Vertex("NS16", "ANG MO KIO", 1.369933175, 103.8495535);
-    private final Vertex VERTEX_3 = new Vertex("NS15", "YIO CHU KANG", 1.381756046, 103.8449439);
+    private final Vertex VERTEX_1 = new Vertex("NS17", "BISHAN", "NS", 1.350838988, 103.8481398);
+    private final Vertex VERTEX_2 = new Vertex("NS16", "ANG MO KIO", "NS", 1.369933175, 103.8495535);
+    private final Vertex VERTEX_3 = new Vertex("NS15", "YIO CHU KANG", "NS", 1.381756046, 103.8449439);
 
     @Test
     void shouldCalculateSimpleLinearPath() throws Exception {

@@ -20,7 +20,7 @@ public class TrainDataParser {
   public List<Vertex> buildVertices() {
     List<TrainData> trainData = trainDataSource.getTrainData();
 
-    return trainData.stream().map(td -> new Vertex(td.getStationId(), td.getStationName(), td.getLatitude(), td.getLongitude())).collect(Collectors.toList());
+    return trainData.stream().map(td -> new Vertex(td.getStationId(), td.getStationName(), td.getMrtTrackCode(), td.getLatitude(), td.getLongitude())).collect(Collectors.toList());
   }
 
   public List<Edge> buildEdges() {

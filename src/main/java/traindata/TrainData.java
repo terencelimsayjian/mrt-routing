@@ -7,11 +7,12 @@ public class TrainData {
   public TrainData() {
   }
 
-  public TrainData(String stationName, String stationId, double latitude, double longitude, String lineCode, int index) {
+  public TrainData(String stationName, String stationId, double latitude, double longitude, String mrtTrackCode, String lineCode, int index) {
     this.stationName = stationName;
     this.stationId = stationId;
     this.latitude = latitude;
     this.longitude = longitude;
+    this.mrtTrackCode = mrtTrackCode;
     this.lineCode = lineCode;
     this.index = index;
   }
@@ -71,5 +72,9 @@ public class TrainData {
 
   public void setIndex(int index) {
     this.index = index;
+  }
+
+  public String getMrtTrackCode() {
+    return mrtTrackCode;
   }
 }

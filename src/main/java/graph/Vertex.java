@@ -5,26 +5,22 @@ public class Vertex {
   private final String displayName;
   private final double lat;
   private final double lng;
+  private final MrtTrack mrtTrack;
 
   public Vertex(String id) {
     this.id = id;
     this.lat = 0;
     this.lng = 0;
     this.displayName = id;
+    this.mrtTrack = MrtTrack.NORTH_EAST_LINE;
   }
 
-  public Vertex(String id, String displayName, double lat, double lng) {
+  public Vertex(String id, String displayName, String mrtTrackCode, double lat, double lng) {
     this.id = id;
     this.displayName = displayName;
     this.lat = lat;
     this.lng = lng;
-  }
-
-  public Vertex(String id, String displayName) {
-    this.id = id;
-    this.displayName = displayName;
-    this.lat = 0;
-    this.lng = 0;
+    this.mrtTrack = MrtTrack.fromCode(mrtTrackCode);
   }
 
   public String getDisplayName() {
