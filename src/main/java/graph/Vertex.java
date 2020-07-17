@@ -27,6 +27,10 @@ public class Vertex {
     this.lng = 0;
   }
 
+  public String getDisplayName() {
+    return displayName;
+  }
+
   String getId() {
     return id;
   }

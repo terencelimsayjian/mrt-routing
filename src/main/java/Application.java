@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class Application {
   public static void main(String[] args) {
     Graph graph = initialiseMrtMap();
+    // Load station names and id into single map, with
 
     Scanner scanner = new Scanner(System.in);
 
@@ -35,7 +36,6 @@ public class Application {
         System.out.println("Number of explored nodes: " + numberOfExploredNodes);
         System.out.println("Total cost: " + totalCost);
       } catch (NoPathExistsException e) {
-        // This is not a recoverable exception from users perspective, as all the trains are connected
         System.out.println("Something went wrong; No path found");
       }
 

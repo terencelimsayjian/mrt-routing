@@ -77,6 +77,28 @@ class GraphTest {
     assertThrows(NoSuchEdgeException.class, () -> graph.getCost(VERTEX_A.getId(), VERTEX_B.getId()));
   }
 
+  @Test
+  void shouldReturnVertexWhenSearchingById() {
+    Graph graph = new Graph();
+    Vertex vertexA = new Vertex("A", "station_a", 0, 0);
+    graph.addVertex(vertexA);
+
+    Optional<Vertex> a = graph.findByIdOrName("station_a");
+
+    assertEquals(vertexA, a.get());
+  }
+
+  @Test
+  void shouldReturnVertexWhenSearchingByName() {
+    Graph graph = new Graph();
+    Vertex vertexA = new Vertex("A", "station_a", 0, 0);
+    graph.addVertex(vertexA);
+
+    Optional<Vertex> a = graph.findByIdOrName("A");
+
+    assertEquals(vertexA, a.get());
+  }
+
   @Nested
   class FindShortestPathDijkstra {
     @Test

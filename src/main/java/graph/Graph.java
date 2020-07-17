@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
@@ -18,10 +19,14 @@ import java.util.Stack;
 public class Graph {
   private HashMap<Vertex, List<Edge>> adjacencyList;
   private Set<Vertex> vertices;
+  private Map<String, Vertex> searchIndexById;
+  private Map<String, Vertex> searchIndexByName;
 
   public Graph() {
     adjacencyList = new HashMap<>();
     vertices = new HashSet<>();
+    searchIndexById = new HashMap<>();
+    searchIndexByName = new HashMap<>();
   }
 
   public void addVertex(Vertex vertex) {
@@ -31,6 +36,8 @@ public class Graph {
 
     vertices.add(vertex);
     adjacencyList.put(vertex, new ArrayList<>());
+    searchIndexById.put(vertex.getId(), vertex);
+    searchIndexByName.put(vertex.getDisplayName(), vertex);
   }
 
   public void addEdge(String v1Id, String v2Id, int weight) {
@@ -60,6 +67,18 @@ public class Graph {
 
   public Optional<Vertex> getVertex(String id) {
     return vertices.stream().filter(v -> v.equals(new Vertex(id))).findFirst();
+  }
+
+  public Optional<Vertex> findByIdOrName(String idOrName) {
+    if (searchIndexById.get(idOrName) != null) {
+      return Optional.of(searchIndexById.get(idOrName));
+    }
+
+    if (searchIndexByName.get(idOrName) != null) {
+      return Optional.of(searchIndexByName.get(idOrName));
+    }
+
+    return Optional.empty();
   }
 
   public int getCost(String startingId, String endingId) {
