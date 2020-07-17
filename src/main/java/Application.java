@@ -12,7 +12,9 @@ import java.util.Scanner;
 public class Application {
   public static void main(String[] args) {
     Graph graph = initialiseMrtMap();
-    // Load station names and id into single map, with
+    List<Vertex> allVertices = graph.getAllVertices();
+    // Render display table of codes
+    // [NL1] Name of station
 
     Scanner scanner = new Scanner(System.in);
 
@@ -45,32 +47,19 @@ public class Application {
     }
 
     // TODO:
-    // 1. Print table
-    //    a. Convert the lines into ENUM
-    //    b. [NL1] Name of station
+    // 1. Print table (Think of a way to handle station names? Maybe just randomly pick one, and remove the duplicates
     // 2. Print results
     //    a. Make get shortest path return vertices
-
-
-    // OR map over search results, to find vertex
-    // For each vertex except the last, find the edge that connects v1 to v2, and get the cost
-    // OR add a decorated Vertex with field costToReachThisVertex
-
-    // North South Line (NS)
-    // East West Line (EW)
-    // North East Line (NE)
-    // Circle Line (CC)
-    // Downtown Line (DT)
-    // OTHERS:
-    // Thomson-East Coast Line (TE prefix)
-    // Bukit Panjang LRT (BP prefix)
-    // Sengkang LRT (STC / SE / SW prefix)
-    // Punggol LRT (PTC / PW / PE prefix)
-
     // Instructions
     // Continue along line CC1 -> CC9 x total minutes
     // Change at interchange CC9 -> DL8 x minutes
     // Continue along line DL8 -> DL19 x total minutes
+
+    // How to build instructions
+    // OR map over search results, to find vertex
+    // For each vertex except the last, find the edge that connects v1 to v2, and get the cost
+    // OR add a decorated Vertex with field costToReachThisVertex
+
   }
 
   private static String getStationIdFromInput(Graph graph, Scanner scanner, String stationLabel) {
