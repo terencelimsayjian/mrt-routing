@@ -42,23 +42,6 @@ class GraphTest {
   }
 
   @Test
-  void shouldGetVertex() {
-    Graph graph = new Graph();
-    graph.addVertex(VERTEX_A);
-
-    Optional<Vertex> a = graph.getVertex("A");
-    assertTrue(a.isPresent());
-  }
-
-  @Test
-  void shouldReturnEmptyOptionalIfDoesNotExist() {
-    Graph graph = new Graph();
-    Optional<Vertex> a = graph.getVertex("A");
-
-    assertFalse(a.isPresent());
-  }
-
-  @Test
   void shouldReturnCostBetweenTwoEdges() {
     Graph graph = new Graph();
     graph.addVertex(VERTEX_A);

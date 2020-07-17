@@ -41,8 +41,8 @@ public class Graph {
   }
 
   public void addEdge(String v1Id, String v2Id, int weight) {
-    Optional<Vertex> optionalFirstVertice = vertices.stream().filter(v -> v.equals(new Vertex(v1Id))).findFirst();
-    Optional<Vertex> optionalSecondVertice = vertices.stream().filter(v -> v.equals(new Vertex(v2Id))).findFirst();
+    Optional<Vertex> optionalFirstVertice = findById(v1Id);
+    Optional<Vertex> optionalSecondVertice = findById(v2Id);
     if (!optionalFirstVertice.isPresent() || !optionalSecondVertice.isPresent()) {
       throw new NoSuchVertexException();
     }
@@ -63,10 +63,6 @@ public class Graph {
 
   public boolean hasVertex(String id) {
     return adjacencyList.get(new Vertex(id)) != null;
-  }
-
-  public Optional<Vertex> getVertex(String id) {
-    return vertices.stream().filter(v -> v.equals(new Vertex(id))).findFirst();
   }
 
   public Optional<Vertex> findById(String id) {
@@ -90,8 +86,8 @@ public class Graph {
   }
 
   public int getCost(String startingId, String endingId) {
-    Optional<Vertex> v1 = getVertex(startingId);
-    Optional<Vertex> v2 = getVertex(endingId);
+    Optional<Vertex> v1 = findById(startingId);
+    Optional<Vertex> v2 = findById(endingId);
 
     if (!v1.isPresent() || !v2.isPresent()) {
       throw new NoSuchVertexException();
