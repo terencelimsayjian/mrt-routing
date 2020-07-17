@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static graph.MrtTrack.NORTH_SOUTH_LINE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -43,9 +44,9 @@ class TrainDataParserTest {
 
       List<Vertex> vertices = trainDataParser.buildVertices();
 
-      assertTrue(vertices.contains(new Vertex("CC1", "A", "NS", 0, 0)));
-      assertTrue(vertices.contains(new Vertex("CC2", "B", "NS", 1, 1)));
-      assertTrue(vertices.contains(new Vertex("DD1", "C", "NS", 2, 2)));
+      assertTrue(vertices.contains(new Vertex("CC1", "A", NORTH_SOUTH_LINE, 0, 0)));
+      assertTrue(vertices.contains(new Vertex("CC2", "B", NORTH_SOUTH_LINE, 1, 1)));
+      assertTrue(vertices.contains(new Vertex("DD1", "C", NORTH_SOUTH_LINE, 2, 2)));
     }
   }
 

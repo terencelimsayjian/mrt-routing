@@ -15,12 +15,12 @@ public class Vertex {
     this.mrtTrack = MrtTrack.NORTH_EAST_LINE;
   }
 
-  public Vertex(String id, String displayName, String mrtTrackCode, double lat, double lng) {
+  public Vertex(String id, String displayName, MrtTrack mrtTrackCode, double lat, double lng) {
     this.id = id;
     this.displayName = displayName;
     this.lat = lat;
     this.lng = lng;
-    this.mrtTrack = MrtTrack.fromCode(mrtTrackCode);
+    this.mrtTrack = mrtTrackCode;
   }
 
   public String getDisplayName() {

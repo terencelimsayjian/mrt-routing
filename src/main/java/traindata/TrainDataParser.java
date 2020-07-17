@@ -1,5 +1,6 @@
 package traindata;
 
+import graph.MrtTrack;
 import graph.Vertex;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class TrainDataParser {
   public List<Vertex> buildVertices() {
     List<TrainData> trainData = trainDataSource.getTrainData();
 
-    return trainData.stream().map(td -> new Vertex(td.getStationId(), td.getStationName(), td.getMrtTrackCode(), td.getLatitude(), td.getLongitude())).collect(Collectors.toList());
+    return trainData.stream().map(td -> new Vertex(td.getStationId(), td.getStationName(), MrtTrack.fromCode(td.getMrtTrackCode()), td.getLatitude(), td.getLongitude())).collect(Collectors.toList());
   }
 
   public List<Edge> buildEdges() {
