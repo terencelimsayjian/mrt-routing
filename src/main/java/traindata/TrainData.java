@@ -34,8 +34,8 @@ public class TrainData {
   @CsvBindByName(column = "LONGITUDE", required = true)
   private double longitude;
 
-  @CsvBindByName(column = "COLOR", required = true)
-  private String color;
+  @CsvBindByName(column = "MRT_TRACK_CODE", required = true)
+  private String mrtTrackCode;
 
   private String lineCode;
 
@@ -49,24 +49,12 @@ public class TrainData {
     return stationId;
   }
 
-  public double getxCoordinate() {
-    return xCoordinate;
-  }
-
-  public double getyCoordinate() {
-    return yCoordinate;
-  }
-
   public double getLatitude() {
     return latitude;
   }
 
   public double getLongitude() {
     return longitude;
-  }
-
-  public String getColor() {
-    return color;
   }
 
   public String getLineCode() {

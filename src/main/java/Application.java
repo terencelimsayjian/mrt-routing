@@ -47,6 +47,7 @@ public class Application {
     // TODO:
     // 1. Print table
     //    a. Convert the lines into ENUM
+    //    b. [NL1] Name of station
     // 2. Print results
     //    a. Make get shortest path return vertices
 
@@ -55,17 +56,16 @@ public class Application {
     // For each vertex except the last, find the edge that connects v1 to v2, and get the cost
     // OR add a decorated Vertex with field costToReachThisVertex
 
-    // North South Line
-    // [NL1] Name of station
-    // [NL2] Name of station
-    // East West Line
-    // North East Line
-    // Circle Line
-    // Downtown Line
-    // Thomson-East Coast Line
-    // Bukit Panjang LRT
-    // Sengkang LRT
-    // Punggol LRT
+    // North South Line (NS)
+    // East West Line (EW)
+    // North East Line (NE)
+    // Circle Line (CC)
+    // Downtown Line (DT)
+    // OTHERS:
+    // Thomson-East Coast Line (TE prefix)
+    // Bukit Panjang LRT (BP prefix)
+    // Sengkang LRT (STC / SE / SW prefix)
+    // Punggol LRT (PTC / PW / PE prefix)
 
     // Instructions
     // Continue along line CC1 -> CC9 x total minutes
