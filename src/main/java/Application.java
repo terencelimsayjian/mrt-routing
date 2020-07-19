@@ -28,12 +28,10 @@ public class Application {
         System.out.println("Finding path from " + startingStationId + " to " + endingStationId);
         ShortestPathResult shortestPathAStar = graph.findShortestPathAStar(startingStationId, endingStationId);
 
-        List<String> shortestPath = shortestPathAStar.getShortestPath();
         List<ShortestPathVertex> shortestPathVertices = shortestPathAStar.getShortestPathVertices();
         Integer numberOfExploredNodes = shortestPathAStar.getNumberOfExploredNodes();
         Integer totalCost = shortestPathAStar.getTotalCost();
 
-        System.out.println("Shortest Path: " + shortestPath);
         System.out.println("Shortest Path Vertex: " + shortestPathVertices);
         System.out.println("Number of explored nodes: " + numberOfExploredNodes);
         System.out.println("Total cost: " + totalCost);

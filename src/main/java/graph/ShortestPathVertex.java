@@ -17,4 +17,22 @@ public class ShortestPathVertex {
            ", costToReachFromPreviousVertex=" + costToReachFromPreviousVertex +
            '}';
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    ShortestPathVertex that = (ShortestPathVertex) o;
+
+    if (costToReachFromPreviousVertex != that.costToReachFromPreviousVertex) return false;
+    return vertex != null ? vertex.equals(that.vertex) : that.vertex == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = vertex != null ? vertex.hashCode() : 0;
+    result = 31 * result + costToReachFromPreviousVertex;
+    return result;
+  }
 }

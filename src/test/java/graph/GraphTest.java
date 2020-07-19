@@ -148,9 +148,13 @@ class GraphTest {
 
       ShortestPathResult actual = graph.findShortestPath("A", "C");
 
-      List<String> expectedShortestPath = Arrays.asList("A", "B", "C");
+      List<ShortestPathVertex> expectedShortestPath = Arrays.asList(
+          new ShortestPathVertex(VERTEX_A, 0),
+          new ShortestPathVertex(VERTEX_B, 1),
+          new ShortestPathVertex(VERTEX_C, 1)
+      );
 
-      assertEquals(expectedShortestPath, actual.getShortestPath());
+      assertEquals(expectedShortestPath, actual.getShortestPathVertices());
       assertEquals(2, actual.getTotalCost());
     }
 
@@ -170,9 +174,13 @@ class GraphTest {
 
       ShortestPathResult actual = graph.findShortestPath("A", "D");
 
-      List<String> expectedShortestPath = Arrays.asList("A", "B", "D");
+      List<ShortestPathVertex> expectedShortestPath = Arrays.asList(
+          new ShortestPathVertex(VERTEX_A, 0),
+          new ShortestPathVertex(VERTEX_B, 5),
+          new ShortestPathVertex(VERTEX_D, 1)
+      );
 
-      assertEquals(expectedShortestPath, actual.getShortestPath());
+      assertEquals(expectedShortestPath, actual.getShortestPathVertices());
       assertEquals(6, actual.getTotalCost());
     }
 
@@ -197,18 +205,23 @@ class GraphTest {
 
       ShortestPathResult actual = graph.findShortestPath("A", "F");
 
-      List<String> expectedShortestPath = Arrays.asList("A", "D", "E", "F");
+      List<ShortestPathVertex> expectedShortestPath = Arrays.asList(
+          new ShortestPathVertex(VERTEX_A, 0),
+          new ShortestPathVertex(VERTEX_D, 4),
+          new ShortestPathVertex(VERTEX_E, 2),
+          new ShortestPathVertex(VERTEX_F, 2)
+      );
 
-      assertEquals(expectedShortestPath, actual.getShortestPath());
+      assertEquals(expectedShortestPath, actual.getShortestPathVertices());
       assertEquals(8, actual.getTotalCost());
     }
   }
 
   @Nested
   class AStarSearch {
-    private final Vertex VERTEX_1 = new Vertex("NS17", "BISHAN", NORTH_SOUTH_LINE, 1.350838988, 103.8481398);
+    private final Vertex VERTEX_1 = new Vertex("NS15", "BISHAN", NORTH_SOUTH_LINE, 1.350838988, 103.8481398);
     private final Vertex VERTEX_2 = new Vertex("NS16", "ANG MO KIO", NORTH_SOUTH_LINE, 1.369933175, 103.8495535);
-    private final Vertex VERTEX_3 = new Vertex("NS15", "YIO CHU KANG", NORTH_SOUTH_LINE, 1.381756046, 103.8449439);
+    private final Vertex VERTEX_3 = new Vertex("NS17", "YIO CHU KANG", NORTH_SOUTH_LINE, 1.381756046, 103.8449439);
 
     @Test
     void shouldCalculateSimpleLinearPath() throws Exception {
@@ -221,11 +234,15 @@ class GraphTest {
       graph.addEdge(VERTEX_1.getId(), VERTEX_2.getId(), 2);
       graph.addEdge(VERTEX_2.getId(), VERTEX_3.getId(), 4);
 
-      ShortestPathResult actual = graph.findShortestPathAStar("NS17", "NS15");
+      ShortestPathResult actual = graph.findShortestPathAStar("NS15", "NS17");
 
-      List<String> expectedShortestPath = Arrays.asList("NS17", "NS16", "NS15");
+      List<ShortestPathVertex> expectedShortestPath = Arrays.asList(
+          new ShortestPathVertex(VERTEX_1, 0),
+          new ShortestPathVertex(VERTEX_2, 2),
+          new ShortestPathVertex(VERTEX_3, 4)
+      );
 
-      assertEquals(expectedShortestPath, actual.getShortestPath());
+      assertEquals(expectedShortestPath, actual.getShortestPathVertices());
       assertEquals(6, actual.getTotalCost());
     }
   }
