@@ -3,19 +3,16 @@ package graph;
 import java.util.List;
 
 public class ShortestPathResult {
-
-  private final Integer totalCost;
   private final Integer numberOfExploredNodes;
   private final List<ShortestPathVertex> shortestPathVertices;
 
-  public ShortestPathResult(List<ShortestPathVertex> shortestPath, Integer totalCost, Integer numberOfExploredNodes) {
-    this.totalCost = totalCost;
+  public ShortestPathResult(List<ShortestPathVertex> shortestPath, Integer numberOfExploredNodes) {
     this.numberOfExploredNodes = numberOfExploredNodes;
     this.shortestPathVertices = shortestPath;
   }
 
   public Integer getTotalCost() {
-    return totalCost;
+    return shortestPathVertices.stream().reduce(0, (sum, shortestPathVertex) -> sum + shortestPathVertex.getCostToReachFromPreviousVertex(), Integer::sum);
   }
 
   public Integer getNumberOfExploredNodes() {

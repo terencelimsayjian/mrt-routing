@@ -226,7 +226,7 @@ public class Graph {
       if (selectedVertex.equals(endingVertex)) {
         List<String> shortestPath = getShortestPath(visitedSearchResults, startingVertex, endingVertex);
         List<ShortestPathVertex> shortestPathVertices = getShortestPathVertices(visitedSearchResults, startingVertex, endingVertex);
-        return new ShortestPathResult(shortestPathVertices, selectedSearchResult.getCostToReachThisVertex(), visitedSearchResults.size());
+        return new ShortestPathResult(shortestPathVertices, visitedSearchResults.size());
       }
 
       List<Edge> edges = adjacencyList.get(selectedVertex);

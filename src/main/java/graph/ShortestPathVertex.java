@@ -35,4 +35,12 @@ public class ShortestPathVertex {
     result = 31 * result + costToReachFromPreviousVertex;
     return result;
   }
+
+  public Vertex getVertex() {
+    return vertex;
+  }
+
+  public int getCostToReachFromPreviousVertex() {
+    return costToReachFromPreviousVertex;
+  }
 }
