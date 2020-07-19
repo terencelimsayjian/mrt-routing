@@ -176,12 +176,12 @@ public class Graph {
     Vertex startingVertex = getVerticeFromGraph(startingId);
     Vertex endingVertex = getVerticeFromGraph(endingId);
 
-    List<SearchResult> searchResults = initialiseSearchResultsCartesianHeuristic(startingVertex, endingVertex);
-    return calculateShortestPath(startingVertex, endingVertex, searchResults);
+    List<IntermediateSearchResult> intermediateSearchResults = initialiseSearchResultsCartesianHeuristic(startingVertex, endingVertex);
+    return calculateShortestPath(startingVertex, endingVertex, intermediateSearchResults);
   }
 
-  private List<SearchResult> initialiseSearchResultsCartesianHeuristic(Vertex startingVertex, Vertex endingVertex) {
-    List<SearchResult> searchResults = new LinkedList<>();
+  private List<IntermediateSearchResult> initialiseSearchResultsCartesianHeuristic(Vertex startingVertex, Vertex endingVertex) {
+    List<IntermediateSearchResult> intermediateSearchResults = new LinkedList<>();
 
     for (Vertex vertex : vertices) {
       double MRT_SPEED_KM_H = 80;
@@ -189,17 +189,17 @@ public class Graph {
       double timeTakenToReachInHours = distanceInKm / MRT_SPEED_KM_H;
       int heuristicCost = (int) Math.round(timeTakenToReachInHours * 60);
 
-      SearchResult searchResult = new SearchResult(vertex, heuristicCost);
+      IntermediateSearchResult intermediateSearchResult = new IntermediateSearchResult(vertex, heuristicCost);
 
       if (vertex.equals(startingVertex)) {
-        searchResult.setCostToReachThisVertex(0);
+        intermediateSearchResult.setCostToReachThisVertex(0);
       }
 
-      searchResults.add(searchResult);
+      intermediateSearchResults.add(intermediateSearchResult);
     }
 
-    Collections.sort(searchResults);
-    return searchResults;
+    Collections.sort(intermediateSearchResults);
+    return intermediateSearchResults;
   }
 
   public ShortestPathResult findShortestPath(String startingId, String endingId) throws NoPathExistsException {
@@ -211,73 +211,73 @@ public class Graph {
     Vertex startingVertex = new Vertex(startingId);
     Vertex endingVertex = new Vertex(endingId);
 
-    List<SearchResult> searchResults = initialiseSearchResults(startingVertex);
-    return calculateShortestPath(startingVertex, endingVertex, searchResults);
+    List<IntermediateSearchResult> intermediateSearchResults = initialiseSearchResults(startingVertex);
+    return calculateShortestPath(startingVertex, endingVertex, intermediateSearchResults);
   }
 
-  private ShortestPathResult calculateShortestPath(Vertex startingVertex, Vertex endingVertex, List<SearchResult> searchResults) throws NoPathExistsException {
-    List<SearchResult> visitedSearchResults = new ArrayList<>();
+  private ShortestPathResult calculateShortestPath(Vertex startingVertex, Vertex endingVertex, List<IntermediateSearchResult> intermediateSearchResults) throws NoPathExistsException {
+    List<IntermediateSearchResult> visitedIntermediateSearchResults = new ArrayList<>();
 
-    while (searchResults.size() > 0 && !searchResults.get(0).isUnknownCost()) {
-      SearchResult selectedSearchResult = searchResults.remove(0);
-      visitedSearchResults.add(selectedSearchResult);
+    while (intermediateSearchResults.size() > 0 && !intermediateSearchResults.get(0).isUnknownCost()) {
+      IntermediateSearchResult selectedIntermediateSearchResult = intermediateSearchResults.remove(0);
+      visitedIntermediateSearchResults.add(selectedIntermediateSearchResult);
 
-      Vertex selectedVertex = selectedSearchResult.getVertex();
+      Vertex selectedVertex = selectedIntermediateSearchResult.getVertex();
       if (selectedVertex.equals(endingVertex)) {
-        List<String> shortestPath = getShortestPath(visitedSearchResults, startingVertex, endingVertex);
-        List<ShortestPathVertex> shortestPathVertices = getShortestPathVertices(visitedSearchResults, startingVertex, endingVertex);
-        return new ShortestPathResult(shortestPathVertices, visitedSearchResults.size());
+        List<String> shortestPath = getShortestPath(visitedIntermediateSearchResults, startingVertex, endingVertex);
+        List<ShortestPathVertex> shortestPathVertices = getShortestPathVertices(visitedIntermediateSearchResults, startingVertex, endingVertex);
+        return new ShortestPathResult(shortestPathVertices, visitedIntermediateSearchResults.size());
       }
 
       List<Edge> edges = adjacencyList.get(selectedVertex);
 
       for (Edge edge : edges) {
-        Optional<SearchResult> unvisitedSearchResult = searchResults.stream().filter(sr -> sr.getVertex().equals(edge.getTrailingVertex())).findFirst();
+        Optional<IntermediateSearchResult> unvisitedSearchResult = intermediateSearchResults.stream().filter(sr -> sr.getVertex().equals(edge.getTrailingVertex())).findFirst();
 
         if (!unvisitedSearchResult.isPresent()) {
           continue;
         }
 
-        SearchResult searchResultToAssess = unvisitedSearchResult.get();
-        Integer costToReachCurrentVertex = edge.getWeight() + selectedSearchResult.getCostToReachThisVertex();
+        IntermediateSearchResult intermediateSearchResultToAssess = unvisitedSearchResult.get();
+        Integer costToReachCurrentVertex = edge.getWeight() + selectedIntermediateSearchResult.getCostToReachThisVertex();
 
-        if (searchResultToAssess.isUnknownCost() || costToReachCurrentVertex < searchResultToAssess.getCostToReachThisVertex()) {
-          searchResultToAssess.setPreviousVertex(selectedVertex);
-          searchResultToAssess.setCostToReachThisVertex(costToReachCurrentVertex);
+        if (intermediateSearchResultToAssess.isUnknownCost() || costToReachCurrentVertex < intermediateSearchResultToAssess.getCostToReachThisVertex()) {
+          intermediateSearchResultToAssess.setPreviousVertex(selectedVertex);
+          intermediateSearchResultToAssess.setCostToReachThisVertex(costToReachCurrentVertex);
         }
       }
 
-      Collections.sort(searchResults);
+      Collections.sort(intermediateSearchResults);
     }
 
     throw new NoPathExistsException();
   }
 
-  private List<SearchResult> initialiseSearchResults(Vertex startingVertex) {
-    List<SearchResult> searchResults = new LinkedList<>();
+  private List<IntermediateSearchResult> initialiseSearchResults(Vertex startingVertex) {
+    List<IntermediateSearchResult> intermediateSearchResults = new LinkedList<>();
 
     for (Vertex vertex : vertices) {
-      SearchResult searchResult = new SearchResult(vertex);
+      IntermediateSearchResult intermediateSearchResult = new IntermediateSearchResult(vertex);
 
       if (vertex.equals(startingVertex)) {
-        searchResult.setCostToReachThisVertex(0);
+        intermediateSearchResult.setCostToReachThisVertex(0);
       }
 
-      searchResults.add(searchResult);
+      intermediateSearchResults.add(intermediateSearchResult);
     }
-    return searchResults;
+    return intermediateSearchResults;
   }
 
-  private List<String> getShortestPath(List<SearchResult> visitedSearchResults, Vertex startingVertex, Vertex endingVertex) {
+  private List<String> getShortestPath(List<IntermediateSearchResult> visitedIntermediateSearchResults, Vertex startingVertex, Vertex endingVertex) {
     List<String> shortestPath = new ArrayList<>();
     shortestPath.add(endingVertex.getId());
 
     Vertex foundVertex = endingVertex;
     while (!foundVertex.equals(startingVertex)) {
       Vertex finalFoundVertex = foundVertex;
-      SearchResult searchResult = visitedSearchResults.stream().filter(sr -> sr.getVertex().equals(finalFoundVertex)).findFirst().get();
+      IntermediateSearchResult intermediateSearchResult = visitedIntermediateSearchResults.stream().filter(sr -> sr.getVertex().equals(finalFoundVertex)).findFirst().get();
 
-      Vertex previousVertex = searchResult.getPreviousVertex();
+      Vertex previousVertex = intermediateSearchResult.getPreviousVertex();
       shortestPath.add(previousVertex.getId());
       foundVertex = previousVertex;
     }
@@ -286,16 +286,16 @@ public class Graph {
     return shortestPath;
   }
 
-  private List<ShortestPathVertex> getShortestPathVertices(List<SearchResult> visitedSearchResults, Vertex startingVertex, Vertex endingVertex) {
+  private List<ShortestPathVertex> getShortestPathVertices(List<IntermediateSearchResult> visitedIntermediateSearchResults, Vertex startingVertex, Vertex endingVertex) {
     List<Vertex> shortestPath = new ArrayList<>();
     shortestPath.add(endingVertex);
 
     Vertex foundVertex = endingVertex;
     while (!foundVertex.equals(startingVertex)) {
       Vertex finalFoundVertex = foundVertex;
-      SearchResult searchResult = visitedSearchResults.stream().filter(sr -> sr.getVertex().equals(finalFoundVertex)).findFirst().get();
+      IntermediateSearchResult intermediateSearchResult = visitedIntermediateSearchResults.stream().filter(sr -> sr.getVertex().equals(finalFoundVertex)).findFirst().get();
 
-      Vertex previousVertex = searchResult.getPreviousVertex();
+      Vertex previousVertex = intermediateSearchResult.getPreviousVertex();
       shortestPath.add(previousVertex);
       foundVertex = previousVertex;
     }

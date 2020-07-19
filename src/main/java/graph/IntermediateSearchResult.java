@@ -2,21 +2,21 @@ package graph;
 
 import java.util.Comparator;
 
-class SearchResult implements Comparable<SearchResult> {
+class IntermediateSearchResult implements Comparable<IntermediateSearchResult> {
 
   private final Vertex vertex;
   private Vertex previousVertex;
   private Integer costToReachThisVertex;
   private Integer heuristicCost;
 
-  SearchResult(Vertex vertex) {
+  IntermediateSearchResult(Vertex vertex) {
     this.vertex = vertex;
     this.previousVertex = null;
     this.costToReachThisVertex = null;
     this.heuristicCost = 0;
   }
 
-  SearchResult(Vertex vertex, int heuristicCost) {
+  IntermediateSearchResult(Vertex vertex, int heuristicCost) {
     this.vertex = vertex;
     this.previousVertex = null;
     this.costToReachThisVertex = null;
@@ -58,7 +58,7 @@ class SearchResult implements Comparable<SearchResult> {
   }
 
   @Override
-  public int compareTo(SearchResult o) {
+  public int compareTo(IntermediateSearchResult o) {
     if (this.isUnknownCost() && o.isUnknownCost()) {
       return 0;
     } else if (this.isUnknownCost()) {
@@ -67,7 +67,7 @@ class SearchResult implements Comparable<SearchResult> {
       return -1;
     }
 
-    Comparator<SearchResult> comparator = Comparator.nullsLast((a, b) -> (a.costToReachThisVertex + a.heuristicCost) - (b.costToReachThisVertex + b.heuristicCost));
+    Comparator<IntermediateSearchResult> comparator = Comparator.nullsLast((a, b) -> (a.costToReachThisVertex + a.heuristicCost) - (b.costToReachThisVertex + b.heuristicCost));
     return comparator.compare(this, o);
   }
 }
