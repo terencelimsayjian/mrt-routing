@@ -1,6 +1,7 @@
 import graph.Graph;
 import graph.NoPathExistsException;
 import graph.ShortestPathResult;
+import graph.ShortestPathVertex;
 import graph.Vertex;
 import traindata.CsvTrainDataSource;
 import traindata.Edge;
@@ -12,9 +13,6 @@ import java.util.Scanner;
 public class Application {
   public static void main(String[] args) {
     Graph graph = initialiseMrtMap();
-    List<Vertex> allVertices = graph.getAllVertices();
-    // Render display table of codes
-    // [NL1] Name of station
 
     Scanner scanner = new Scanner(System.in);
 
@@ -31,10 +29,12 @@ public class Application {
         ShortestPathResult shortestPathAStar = graph.findShortestPathAStar(startingStationId, endingStationId);
 
         List<String> shortestPath = shortestPathAStar.getShortestPath();
+        List<ShortestPathVertex> shortestPathVertices = shortestPathAStar.getShortestPathVertices();
         Integer numberOfExploredNodes = shortestPathAStar.getNumberOfExploredNodes();
         Integer totalCost = shortestPathAStar.getTotalCost();
 
         System.out.println("Shortest Path: " + shortestPath);
+        System.out.println("Shortest Path Vertex: " + shortestPathVertices);
         System.out.println("Number of explored nodes: " + numberOfExploredNodes);
         System.out.println("Total cost: " + totalCost);
       } catch (NoPathExistsException e) {
@@ -43,22 +43,19 @@ public class Application {
 
       System.out.println("Would you like to try again? [y/N]");
       continueAsking = scanner.next();
-
     }
 
     // TODO:
-    // 1. Print table (Think of a way to handle station names? Maybe just randomly pick one, and remove the duplicates
-    // 2. Print results
-    //    a. Make get shortest path return vertices
+    // 1. Print out results:
+    //    a. Make get shortest path return vertices? edges?
+    //    b. Either decide to return an interface that you can build up the route by itself, or have to query the graph again
     // Instructions
     // Continue along line CC1 -> CC9 x total minutes
     // Change at interchange CC9 -> DL8 x minutes
     // Continue along line DL8 -> DL19 x total minutes
 
-    // How to build instructions
-    // OR map over search results, to find vertex
-    // For each vertex except the last, find the edge that connects v1 to v2, and get the cost
-    // OR add a decorated Vertex with field costToReachThisVertex
+    // 2. Allow for name input
+
 
   }
 

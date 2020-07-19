@@ -7,9 +7,9 @@ public class ShortestPathResult {
   private final List<String> shortestPath;
   private final Integer totalCost;
   private final Integer numberOfExploredNodes;
-  private final List<Vertex> shortestPathVertices;
+  private final List<ShortestPathVertex> shortestPathVertices;
 
-  public ShortestPathResult(List<String> shortestPath, Integer totalCost, Integer numberOfExploredNodes, List<Vertex> shortestPathVertices) {
+  public ShortestPathResult(List<String> shortestPath, Integer totalCost, Integer numberOfExploredNodes, List<ShortestPathVertex> shortestPathVertices) {
     this.shortestPath = shortestPath;
     this.totalCost = totalCost;
     this.numberOfExploredNodes = numberOfExploredNodes;
@@ -26,5 +26,9 @@ public class ShortestPathResult {
 
   public Integer getNumberOfExploredNodes() {
     return numberOfExploredNodes;
+  }
+
+  public List<ShortestPathVertex> getShortestPathVertices() {
+    return shortestPathVertices;
   }
 }

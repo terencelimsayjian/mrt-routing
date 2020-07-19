@@ -61,4 +61,8 @@ public class Vertex {
            ", displayName='" + displayName + '\'' +
            '}';
   }
+
+  public MrtTrack getMrtTrack() {
+    return mrtTrack;
+  }
 }

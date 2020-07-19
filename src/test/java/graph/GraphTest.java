@@ -7,8 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static graph.MrtTrack.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static graph.MrtTrack.NORTH_SOUTH_LINE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GraphTest {
   public static final Vertex VERTEX_A = new Vertex("A");
@@ -84,32 +87,27 @@ class GraphTest {
     }
 
     @Test
-    void findByNameOrIdShouldReturnVertexWhenSearchingById() {
+    void findByNameShouldReturnMultipleVertices() {
       Graph graph = new Graph();
-      graph.addVertex(vertexA);
+      Vertex vertexASameName = new Vertex("A", "station_a", NORTH_SOUTH_LINE, 0, 0);
+      Vertex vertexBSameName = new Vertex("B", "station_a", NORTH_SOUTH_LINE, 0, 0);
+      graph.addVertex(vertexASameName);
+      graph.addVertex(vertexBSameName);
 
-      Optional<Vertex> a = graph.findByIdOrName("station_a");
-      assertEquals(vertexA, a.get());
+      List<Vertex> actual = graph.findByName("station_a");
+
+      assertEquals(2, actual.size());
+      assertTrue(actual.contains(vertexASameName));
+      assertTrue(actual.contains(vertexBSameName));
     }
 
     @Test
-    void findByNameOrIdShouldReturnVertexWhenSearchingByName() {
+    void findByNameShouldReturnEmptyListIfNoneExists() {
       Graph graph = new Graph();
-      graph.addVertex(vertexA);
+      List<Vertex> actual = graph.findByName("station_a");
 
-      Optional<Vertex> a = graph.findByIdOrName("A");
-      assertEquals(vertexA, a.get());
+      assertEquals(0, actual.size());
     }
-
-    @Test
-    void findByNameOrIdShouldReturnEmptyOptionalIfNotExist() {
-      Graph graph = new Graph();
-      graph.addVertex(vertexA);
-
-      Optional<Vertex> a = graph.findByIdOrName("B");
-      assertFalse(a.isPresent());
-    }
-
   }
 
   @Nested

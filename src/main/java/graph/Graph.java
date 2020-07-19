@@ -20,7 +20,7 @@ public class Graph {
   private HashMap<Vertex, List<Edge>> adjacencyList;
   private Set<Vertex> vertices;
   private Map<String, Vertex> searchIndexById;
-  private Map<String, Vertex> searchIndexByName;
+  private Map<String, List<Vertex>> searchIndexByName;
 
   public Graph() {
     adjacencyList = new HashMap<>();
@@ -37,7 +37,12 @@ public class Graph {
     vertices.add(vertex);
     adjacencyList.put(vertex, new ArrayList<>());
     searchIndexById.put(vertex.getId(), vertex);
-    searchIndexByName.put(vertex.getDisplayName(), vertex);
+
+    if (searchIndexByName.get(vertex.getDisplayName()) != null) {
+      searchIndexByName.get(vertex.getDisplayName()).add(vertex);
+    } else {
+      searchIndexByName.put(vertex.getDisplayName(), new ArrayList(Arrays.asList(vertex)));
+    }
   }
 
   public void addEdge(String v1Id, String v2Id, int weight) {
@@ -73,16 +78,12 @@ public class Graph {
     return Optional.empty();
   }
 
-  public Optional<Vertex> findByIdOrName(String idOrName) {
-    if (searchIndexById.get(idOrName) != null) {
-      return Optional.of(searchIndexById.get(idOrName));
+  public List<Vertex> findByName(String name) {
+    if (searchIndexByName.get(name) != null) {
+      return new ArrayList<>(searchIndexByName.get(name));
     }
 
-    if (searchIndexByName.get(idOrName) != null) {
-      return Optional.of(searchIndexByName.get(idOrName));
-    }
-
-    return Optional.empty();
+    return new ArrayList<>();
   }
 
   public int getCost(String startingId, String endingId) {
@@ -224,8 +225,8 @@ public class Graph {
       Vertex selectedVertex = selectedSearchResult.getVertex();
       if (selectedVertex.equals(endingVertex)) {
         List<String> shortestPath = getShortestPath(visitedSearchResults, startingVertex, endingVertex);
-        List<Vertex> shortestPathVertices = getShortestPathVertices(visitedSearchResults, startingVertex, endingVertex);
-        return new ShortestPathResult(shortestPath, selectedSearchResult.getCostToReachThisVertex(), (int) visitedSearchResults.size(), shortestPathVertices);
+        List<ShortestPathVertex> shortestPathVertices = getShortestPathVertices(visitedSearchResults, startingVertex, endingVertex);
+        return new ShortestPathResult(shortestPath, selectedSearchResult.getCostToReachThisVertex(), visitedSearchResults.size(), shortestPathVertices);
       }
 
       List<Edge> edges = adjacencyList.get(selectedVertex);
@@ -285,7 +286,7 @@ public class Graph {
     return shortestPath;
   }
 
-  private List<Vertex> getShortestPathVertices(List<SearchResult> visitedSearchResults, Vertex startingVertex, Vertex endingVertex) {
+  private List<ShortestPathVertex> getShortestPathVertices(List<SearchResult> visitedSearchResults, Vertex startingVertex, Vertex endingVertex) {
     List<Vertex> shortestPath = new ArrayList<>();
     shortestPath.add(endingVertex);
 
@@ -299,9 +300,20 @@ public class Graph {
       foundVertex = previousVertex;
     }
 
-    // TODO: Add costToReachVertex
     Collections.reverse(shortestPath);
-    return shortestPath;
+
+    List<ShortestPathVertex> shortestPathVertices = new ArrayList<>();
+
+    shortestPathVertices.add(new ShortestPathVertex(shortestPath.get(0), 0));
+    for (int i = 1; i < shortestPath.size(); i++) {
+      Vertex currentVertex = shortestPath.get(i);
+      Vertex previousVertex = shortestPath.get(i - 1);
+
+      Edge edge = adjacencyList.get(previousVertex).stream().filter(e -> e.getTrailingVertex().equals(currentVertex)).findFirst().get();
+      shortestPathVertices.add(new ShortestPathVertex(edge.getTrailingVertex(), edge.getWeight()));
+    }
+
+    return shortestPathVertices;
   }
 
 }

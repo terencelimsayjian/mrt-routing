@@ -1,20 +1,26 @@
 package graph;
 
 public enum MrtTrack {
-  NORTH_SOUTH_LINE("NS"),
-  EAST_WEST_LINE("EW"),
-  NORTH_EAST_LINE("NE"),
-  CIRCLE_LINE("CC"),
-  DOWNTOWN_LINE("DT"),
-  THOMSON_EAST_LINE("TE"),
-  BUKIT_PANJANG_LRT("BPLRT"),
-  SENGKANG_LRT("SLRT"),
-  PUNGGOL_LRT("PLRT");
+  NORTH_SOUTH_LINE("NS", "North South Line", 1),
+  EAST_WEST_LINE("EW", "East West Line", 2),
+  NORTH_EAST_LINE("NE", "North East Line", 3),
+  CIRCLE_LINE("CC", "Circle Lin", 4),
+  DOWNTOWN_LINE("DT", "Downtown Line", 5),
+  THOMSON_EAST_LINE("TE", "Thomson East Line", 6),
+  BUKIT_PANJANG_LRT("BPLRT", "Bukit Panjang LRT", 7),
+  SENGKANG_LRT("SLRT", "Sengkang LRT", 8),
+  PUNGGOL_LRT("PLRT", "Punggol LRT", 9);
 
   private final String code;
 
-  MrtTrack(String code) {
+  private final String displayName;
+
+  private final int displayPriority;
+
+  MrtTrack(String code, String displayName, int displayPriority) {
     this.code = code;
+    this.displayName = displayName;
+    this.displayPriority = displayPriority;
   }
 
   public static MrtTrack fromCode(String code) {
@@ -40,5 +46,17 @@ public enum MrtTrack {
       default:
         throw new RuntimeException("Failed to map code into MrtTrack");
     }
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public int getDisplayPriority() {
+    return displayPriority;
   }
 }
