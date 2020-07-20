@@ -29,11 +29,9 @@ public class Application {
         ShortestPathResult shortestPathAStar = graph.findShortestPathAStar(startingStationId, endingStationId);
 
         List<ShortestPathVertex> shortestPathVertices = shortestPathAStar.getShortestPathVertices();
-        Integer numberOfExploredNodes = shortestPathAStar.getNumberOfExploredNodes();
         Integer totalCost = shortestPathAStar.getTotalCost();
 
         System.out.println("Shortest Path Vertex: " + shortestPathVertices);
-        System.out.println("Number of explored nodes: " + numberOfExploredNodes);
         System.out.println("Total cost: " + totalCost);
       } catch (NoPathExistsException e) {
         System.out.println("Something went wrong; No path found");
@@ -45,15 +43,16 @@ public class Application {
 
     // TODO:
     // 1. Print out results:
-    //    a. Make get shortest path return vertices? edges?
-    //    b. Either decide to return an interface that you can build up the route by itself, or have to query the graph again
+    //    a. Make get shortest path return vertices with cost (DONE)
+    //    b. Either decide to return an interface that you can build up the route by itself, or have to query the graph again (DONE)
+    //    c. Display UI as follows:
     // Instructions
     // Continue along line CC1 -> CC9 x total minutes
     // Change at interchange CC9 -> DL8 x minutes
     // Continue along line DL8 -> DL19 x total minutes
 
     // 2. Allow for name input
-
+    // Only allow name or ID at one time, but not both
 
   }
 
