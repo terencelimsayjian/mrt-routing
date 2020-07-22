@@ -146,7 +146,7 @@ class GraphTest {
       graph.addEdge(VERTEX_A.getId(), VERTEX_B.getId(), 1);
       graph.addEdge(VERTEX_B.getId(), VERTEX_C.getId(), 1);
 
-      ShortestPathResult actual = graph.findShortestPath("A", "C");
+      List<ShortestPathVertex> actual = graph.findShortestPath("A", "C");
 
       List<ShortestPathVertex> expectedShortestPath = Arrays.asList(
           new ShortestPathVertex(VERTEX_A, 0),
@@ -154,8 +154,9 @@ class GraphTest {
           new ShortestPathVertex(VERTEX_C, 1)
       );
 
-      assertEquals(expectedShortestPath, actual.getShortestPathVertices());
-      assertEquals(2, actual.getTotalCost());
+      int totalCost = actual.stream().reduce(0, (sum, vertex) -> sum + vertex.getCostToReachFromPreviousVertex(), Integer::sum);
+      assertEquals(expectedShortestPath, actual);
+      assertEquals(2, totalCost);
     }
 
     @Test
@@ -172,7 +173,7 @@ class GraphTest {
       graph.addEdge(VERTEX_C.getId(), VERTEX_D.getId(), 8);
       graph.addEdge(VERTEX_B.getId(), VERTEX_D.getId(), 1);
 
-      ShortestPathResult actual = graph.findShortestPath("A", "D");
+      List<ShortestPathVertex> actual = graph.findShortestPath("A", "D");
 
       List<ShortestPathVertex> expectedShortestPath = Arrays.asList(
           new ShortestPathVertex(VERTEX_A, 0),
@@ -180,8 +181,9 @@ class GraphTest {
           new ShortestPathVertex(VERTEX_D, 1)
       );
 
-      assertEquals(expectedShortestPath, actual.getShortestPathVertices());
-      assertEquals(6, actual.getTotalCost());
+      int totalCost = actual.stream().reduce(0, (sum, vertex) -> sum + vertex.getCostToReachFromPreviousVertex(), Integer::sum);
+      assertEquals(expectedShortestPath, actual);
+      assertEquals(6, totalCost);
     }
 
     @Test
@@ -203,7 +205,7 @@ class GraphTest {
       graph.addEdge(VERTEX_D.getId(), VERTEX_E.getId(), 2);
       graph.addEdge(VERTEX_E.getId(), VERTEX_F.getId(), 2);
 
-      ShortestPathResult actual = graph.findShortestPath("A", "F");
+      List<ShortestPathVertex> actual = graph.findShortestPath("A", "F");
 
       List<ShortestPathVertex> expectedShortestPath = Arrays.asList(
           new ShortestPathVertex(VERTEX_A, 0),
@@ -212,8 +214,9 @@ class GraphTest {
           new ShortestPathVertex(VERTEX_F, 2)
       );
 
-      assertEquals(expectedShortestPath, actual.getShortestPathVertices());
-      assertEquals(8, actual.getTotalCost());
+      int totalCost = actual.stream().reduce(0, (sum, vertex) -> sum + vertex.getCostToReachFromPreviousVertex(), Integer::sum);
+      assertEquals(expectedShortestPath, actual);
+      assertEquals(8, totalCost);
     }
   }
 
@@ -234,7 +237,7 @@ class GraphTest {
       graph.addEdge(VERTEX_1.getId(), VERTEX_2.getId(), 2);
       graph.addEdge(VERTEX_2.getId(), VERTEX_3.getId(), 4);
 
-      ShortestPathResult actual = graph.findShortestPathAStar("NS15", "NS17");
+      List<ShortestPathVertex> actual = graph.findShortestPathAStar("NS15", "NS17");
 
       List<ShortestPathVertex> expectedShortestPath = Arrays.asList(
           new ShortestPathVertex(VERTEX_1, 0),
@@ -242,8 +245,9 @@ class GraphTest {
           new ShortestPathVertex(VERTEX_3, 4)
       );
 
-      assertEquals(expectedShortestPath, actual.getShortestPathVertices());
-      assertEquals(6, actual.getTotalCost());
+      int totalCost = actual.stream().reduce(0, (sum, vertex) -> sum + vertex.getCostToReachFromPreviousVertex(), Integer::sum);
+      assertEquals(expectedShortestPath, actual);
+      assertEquals(6, totalCost);
     }
   }
 

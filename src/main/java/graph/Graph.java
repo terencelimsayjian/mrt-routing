@@ -168,7 +168,7 @@ public class Graph {
     return startingVertex.get();
   }
 
-  public ShortestPathResult findShortestPathAStar(String startingId, String endingId) throws NoPathExistsException {
+  public List<ShortestPathVertex> findShortestPathAStar(String startingId, String endingId) throws NoPathExistsException {
     if (!hasVertex(startingId) || !hasVertex(endingId)) {
       throw new NoSuchVertexException();
     }
@@ -202,7 +202,7 @@ public class Graph {
     return intermediateSearchResults;
   }
 
-  public ShortestPathResult findShortestPath(String startingId, String endingId) throws NoPathExistsException {
+  public List<ShortestPathVertex> findShortestPath(String startingId, String endingId) throws NoPathExistsException {
     // This algorithm uses the Dijkstra algorithm to find shortest path
     if (!hasVertex(startingId) || !hasVertex(endingId)) {
       throw new NoSuchVertexException();
@@ -215,7 +215,7 @@ public class Graph {
     return calculateShortestPath(startingVertex, endingVertex, intermediateSearchResults);
   }
 
-  private ShortestPathResult calculateShortestPath(Vertex startingVertex, Vertex endingVertex, List<IntermediateSearchResult> intermediateSearchResults) throws NoPathExistsException {
+  private List<ShortestPathVertex> calculateShortestPath(Vertex startingVertex, Vertex endingVertex, List<IntermediateSearchResult> intermediateSearchResults) throws NoPathExistsException {
     List<IntermediateSearchResult> visitedIntermediateSearchResults = new ArrayList<>();
 
     while (intermediateSearchResults.size() > 0 && !intermediateSearchResults.get(0).isUnknownCost()) {
@@ -224,9 +224,8 @@ public class Graph {
 
       Vertex selectedVertex = selectedIntermediateSearchResult.getVertex();
       if (selectedVertex.equals(endingVertex)) {
-        List<String> shortestPath = getShortestPath(visitedIntermediateSearchResults, startingVertex, endingVertex);
-        List<ShortestPathVertex> shortestPathVertices = getShortestPathVertices(visitedIntermediateSearchResults, startingVertex, endingVertex);
-        return new ShortestPathResult(shortestPathVertices, visitedIntermediateSearchResults.size());
+        return getShortestPathVertices(visitedIntermediateSearchResults, startingVertex, endingVertex);
+//        return new ShortestPathResult(shortestPathVertices, visitedIntermediateSearchResults.size());
       }
 
       List<Edge> edges = adjacencyList.get(selectedVertex);

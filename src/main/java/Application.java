@@ -1,6 +1,5 @@
 import graph.Graph;
 import graph.NoPathExistsException;
-import graph.ShortestPathResult;
 import graph.ShortestPathVertex;
 import graph.Vertex;
 import traindata.CsvTrainDataSource;
@@ -26,10 +25,9 @@ public class Application {
 
       try {
         System.out.println("Finding path from " + startingStationId + " to " + endingStationId);
-        ShortestPathResult shortestPathAStar = graph.findShortestPathAStar(startingStationId, endingStationId);
+        List<ShortestPathVertex> shortestPathVertices = graph.findShortestPathAStar(startingStationId, endingStationId);
 
-        List<ShortestPathVertex> shortestPathVertices = shortestPathAStar.getShortestPathVertices();
-        Integer totalCost = shortestPathAStar.getTotalCost();
+        Integer totalCost = shortestPathVertices.stream().reduce(0, (sum, vertex) -> sum + vertex.getCostToReachFromPreviousVertex(), Integer::sum);
 
         System.out.println("Shortest Path Vertex: " + shortestPathVertices);
         System.out.println("Total cost: " + totalCost);
