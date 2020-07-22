@@ -29,14 +29,6 @@ public class RoutingInstruction {
     INTERCHANGE;
 
   }
-  @Override
-  public int hashCode() {
-    int result = type.hashCode();
-    result = 31 * result + startingVertex.hashCode();
-    result = 31 * result + endingVertex.hashCode();
-    result = 31 * result + totalCost;
-    return result;
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -49,5 +41,14 @@ public class RoutingInstruction {
     if (type != that.type) return false;
     if (!startingVertex.equals(that.startingVertex)) return false;
     return endingVertex.equals(that.endingVertex);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = type.hashCode();
+    result = 31 * result + startingVertex.hashCode();
+    result = 31 * result + endingVertex.hashCode();
+    result = 31 * result + totalCost;
+    return result;
   }
 }

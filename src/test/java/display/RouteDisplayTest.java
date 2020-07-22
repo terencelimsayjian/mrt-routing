@@ -8,32 +8,129 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RouteDisplayTest {
 
+  public static final ShortestPathVertex STATION_A = new ShortestPathVertex(new Vertex("A", "Station A", MrtTrack.NORTH_SOUTH_LINE, 0, 0), 0);
+  public static final ShortestPathVertex STATION_B = new ShortestPathVertex(new Vertex("B", "Station B", MrtTrack.NORTH_SOUTH_LINE, 0, 0), 2);
+  public static final ShortestPathVertex STATION_C_1 = new ShortestPathVertex(new Vertex("C1", "Station C", MrtTrack.NORTH_SOUTH_LINE, 0, 0), 2);
+  public static final ShortestPathVertex STATION_C_2 = new ShortestPathVertex(new Vertex("C2", "Station C", MrtTrack.EAST_WEST_LINE, 0, 0), 5);
+  public static final ShortestPathVertex STATION_D = new ShortestPathVertex(new Vertex("D", "Station D", MrtTrack.EAST_WEST_LINE, 0, 0), 2);
+
   @Test
-  void name() {
+  void shouldReturnRoutingInstructionForSimpleTrack() {
     List<ShortestPathVertex> shortestPathVertexList = new ArrayList<>();
-    ShortestPathVertex stationA = new ShortestPathVertex(new Vertex("A", "Station A", MrtTrack.NORTH_SOUTH_LINE, 0, 0), 0);
-    ShortestPathVertex stationB = new ShortestPathVertex(new Vertex("B", "Station B", MrtTrack.NORTH_SOUTH_LINE, 0, 0), 0);
-    ShortestPathVertex stationC1 = new ShortestPathVertex(new Vertex("C1", "Station C", MrtTrack.NORTH_SOUTH_LINE, 0, 0), 2);
-    ShortestPathVertex stationC2 = new ShortestPathVertex(new Vertex("C2", "Station C", MrtTrack.EAST_WEST_LINE, 0, 0), 5);
-    ShortestPathVertex stationD = new ShortestPathVertex(new Vertex("D", "Station D", MrtTrack.EAST_WEST_LINE, 0, 0), 2);
 
-    shortestPathVertexList.add(stationA);
-    shortestPathVertexList.add(stationB);
-    shortestPathVertexList.add(stationC1);
-    shortestPathVertexList.add(stationC2);
-    shortestPathVertexList.add(stationD);
+    shortestPathVertexList.add(STATION_A);
+    shortestPathVertexList.add(STATION_B);
+    shortestPathVertexList.add(STATION_C_1);
 
-    List<List<ShortestPathVertex>> actual = new RouteDisplay().display(shortestPathVertexList);
+    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
 
     List<RoutingInstruction> expected = new ArrayList<>();
-    expected.add(RoutingInstruction.buildRegular(stationA.getVertex(), stationC1.getVertex(), 2));
-    expected.add(RoutingInstruction.buildInterchange(stationC1.getVertex(), stationC2.getVertex(), 5));
-    expected.add(RoutingInstruction.buildRegular(stationC2.getVertex(), stationD.getVertex(), 2));
+    expected.add(RoutingInstruction.buildRegular(STATION_A.getVertex(), STATION_C_1.getVertex(), 4));
 
-    assertEquals(expected, actual);
+    assertEquals(expected.size(), actual.size());
+    assertEquals(expected.get(0), actual.get(0));
+  }
+
+  @Test
+  void shouldReturnRoutingInstructionForTrackInterchangeTrack() {
+    List<ShortestPathVertex> shortestPathVertexList = new ArrayList<>();
+
+    shortestPathVertexList.add(STATION_A);
+    shortestPathVertexList.add(STATION_B);
+    shortestPathVertexList.add(STATION_C_1);
+    shortestPathVertexList.add(STATION_C_2);
+    shortestPathVertexList.add(STATION_D);
+
+    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+
+    List<RoutingInstruction> expected = new ArrayList<>();
+    expected.add(RoutingInstruction.buildRegular(STATION_A.getVertex(), STATION_C_1.getVertex(), 4));
+    expected.add(RoutingInstruction.buildInterchange(STATION_C_1.getVertex(), STATION_C_2.getVertex(), 5));
+    expected.add(RoutingInstruction.buildRegular(STATION_C_2.getVertex(), STATION_D.getVertex(), 2));
+
+    assertEquals(expected.size(), actual.size());
+    assertEquals(expected.get(0), actual.get(0));
+    assertEquals(expected.get(1), actual.get(1));
+    assertEquals(expected.get(2), actual.get(2));
+  }
+
+  @Test
+  void shouldRemoveDuplicateInterchangesAtStartOfPath() {
+    List<ShortestPathVertex> shortestPathVertexList = new ArrayList<>();
+
+    shortestPathVertexList.add(STATION_C_1);
+    shortestPathVertexList.add(STATION_C_2);
+    shortestPathVertexList.add(STATION_D);
+
+    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+
+    List<RoutingInstruction> expected = new ArrayList<>();
+    expected.add(RoutingInstruction.buildRegular(STATION_C_2.getVertex(), STATION_D.getVertex(), 2));
+
+    assertEquals(expected.size(), actual.size());
+    assertEquals(expected.get(0), actual.get(0));
+  }
+
+  @Test
+  void shouldRemoveMultipleDuplicateInterchangesAtStartOfPath() {
+    List<ShortestPathVertex> shortestPathVertexList = new ArrayList<>();
+
+    shortestPathVertexList.add(STATION_C_1);
+    shortestPathVertexList.add(STATION_C_2);
+    shortestPathVertexList.add(STATION_C_1);
+    shortestPathVertexList.add(STATION_C_2);
+    shortestPathVertexList.add(STATION_D);
+
+    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+
+    List<RoutingInstruction> expected = new ArrayList<>();
+    expected.add(RoutingInstruction.buildRegular(STATION_C_2.getVertex(), STATION_D.getVertex(), 2));
+
+    assertEquals(expected.size(), actual.size());
+    assertEquals(expected.get(0), actual.get(0));
+  }
+
+  @Test
+  void shouldRemoveDuplicateInterchangesAtEndOfPath() {
+    List<ShortestPathVertex> shortestPathVertexList = new ArrayList<>();
+
+    shortestPathVertexList.add(STATION_A);
+    shortestPathVertexList.add(STATION_B);
+    shortestPathVertexList.add(STATION_C_1);
+    shortestPathVertexList.add(STATION_C_2);
+
+    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+
+    List<RoutingInstruction> expected = new ArrayList<>();
+    expected.add(RoutingInstruction.buildRegular(STATION_A.getVertex(), STATION_C_1.getVertex(), 4));
+
+    assertEquals(expected.size(), actual.size());
+    assertEquals(expected.get(0), actual.get(0));
+  }
+
+  @Test
+  void shouldRemoveMultipleDuplicateInterchangesAtEndOfPath() {
+    List<ShortestPathVertex> shortestPathVertexList = new ArrayList<>();
+
+    shortestPathVertexList.add(STATION_A);
+    shortestPathVertexList.add(STATION_B);
+    shortestPathVertexList.add(STATION_C_1);
+    shortestPathVertexList.add(STATION_C_2);
+    shortestPathVertexList.add(STATION_C_1);
+    shortestPathVertexList.add(STATION_C_2);
+    shortestPathVertexList.add(STATION_C_1);
+    shortestPathVertexList.add(STATION_C_2);
+
+    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+
+    List<RoutingInstruction> expected = new ArrayList<>();
+    expected.add(RoutingInstruction.buildRegular(STATION_A.getVertex(), STATION_C_1.getVertex(), 4));
+
+    assertEquals(expected.size(), actual.size());
+    assertEquals(expected.get(0), actual.get(0));
   }
 }
