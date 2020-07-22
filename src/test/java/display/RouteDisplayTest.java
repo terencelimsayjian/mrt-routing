@@ -26,7 +26,7 @@ class RouteDisplayTest {
     shortestPathVertexList.add(STATION_B);
     shortestPathVertexList.add(STATION_C_1);
 
-    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+    List<RoutingInstruction> actual = RouteDisplay.display(shortestPathVertexList);
 
     List<RoutingInstruction> expected = new ArrayList<>();
     expected.add(RoutingInstruction.buildRegular(STATION_A.getVertex(), STATION_C_1.getVertex(), 4));
@@ -45,7 +45,7 @@ class RouteDisplayTest {
     shortestPathVertexList.add(STATION_C_2);
     shortestPathVertexList.add(STATION_D);
 
-    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+    List<RoutingInstruction> actual = RouteDisplay.display(shortestPathVertexList);
 
     List<RoutingInstruction> expected = new ArrayList<>();
     expected.add(RoutingInstruction.buildRegular(STATION_A.getVertex(), STATION_C_1.getVertex(), 4));
@@ -66,7 +66,7 @@ class RouteDisplayTest {
     shortestPathVertexList.add(STATION_C_2);
     shortestPathVertexList.add(STATION_D);
 
-    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+    List<RoutingInstruction> actual = RouteDisplay.display(shortestPathVertexList);
 
     List<RoutingInstruction> expected = new ArrayList<>();
     expected.add(RoutingInstruction.buildRegular(STATION_C_2.getVertex(), STATION_D.getVertex(), 2));
@@ -85,7 +85,7 @@ class RouteDisplayTest {
     shortestPathVertexList.add(STATION_C_2);
     shortestPathVertexList.add(STATION_D);
 
-    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+    List<RoutingInstruction> actual = RouteDisplay.display(shortestPathVertexList);
 
     List<RoutingInstruction> expected = new ArrayList<>();
     expected.add(RoutingInstruction.buildRegular(STATION_C_2.getVertex(), STATION_D.getVertex(), 2));
@@ -103,7 +103,7 @@ class RouteDisplayTest {
     shortestPathVertexList.add(STATION_C_1);
     shortestPathVertexList.add(STATION_C_2);
 
-    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+    List<RoutingInstruction> actual = RouteDisplay.display(shortestPathVertexList);
 
     List<RoutingInstruction> expected = new ArrayList<>();
     expected.add(RoutingInstruction.buildRegular(STATION_A.getVertex(), STATION_C_1.getVertex(), 4));
@@ -125,7 +125,7 @@ class RouteDisplayTest {
     shortestPathVertexList.add(STATION_C_1);
     shortestPathVertexList.add(STATION_C_2);
 
-    List<RoutingInstruction> actual = new RouteDisplay().display(shortestPathVertexList);
+    List<RoutingInstruction> actual = RouteDisplay.display(shortestPathVertexList);
 
     List<RoutingInstruction> expected = new ArrayList<>();
     expected.add(RoutingInstruction.buildRegular(STATION_A.getVertex(), STATION_C_1.getVertex(), 4));

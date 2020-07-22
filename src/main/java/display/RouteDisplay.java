@@ -7,7 +7,7 @@ import java.util.List;
 
 public class RouteDisplay {
 
-  public List<RoutingInstruction> display(List<ShortestPathVertex> shortestPath) {
+  public static List<RoutingInstruction> display(List<ShortestPathVertex> shortestPath) {
     List<ShortestPathVertex> shortestPathWithoutDuplicates = removeDuplicateStationsFromStartAndEnd(shortestPath);
     List<List<ShortestPathVertex>> listOfDirectRoutes = buildListOfDirectRoutes(shortestPathWithoutDuplicates);
 
@@ -42,7 +42,7 @@ public class RouteDisplay {
     return routingInstructions;
   }
 
-  private List<List<ShortestPathVertex>> buildListOfDirectRoutes(List<ShortestPathVertex> shortestPathWithoutDuplicates) {
+  private static List<List<ShortestPathVertex>> buildListOfDirectRoutes(List<ShortestPathVertex> shortestPathWithoutDuplicates) {
     List<List<ShortestPathVertex>> listOfDirectRoutes = new ArrayList<>();
     List<Integer> indexesOfStartingInterchanges = new ArrayList<>();
 
@@ -64,7 +64,7 @@ public class RouteDisplay {
     return listOfDirectRoutes;
   }
 
-  private List<ShortestPathVertex> removeDuplicateStationsFromStartAndEnd(List<ShortestPathVertex> shortestPath) {
+  private static List<ShortestPathVertex> removeDuplicateStationsFromStartAndEnd(List<ShortestPathVertex> shortestPath) {
     int numberOfElementsToRemoveFromStart = 0;
     String firstVertexDisplayName = shortestPath.get(0).getVertex().getDisplayName();
 

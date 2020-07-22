@@ -1,3 +1,5 @@
+import display.RouteDisplay;
+import display.RoutingInstruction;
 import graph.Graph;
 import graph.NoPathExistsException;
 import graph.ShortestPathVertex;
@@ -29,8 +31,16 @@ public class Application {
 
         Integer totalCost = shortestPathVertices.stream().reduce(0, (sum, vertex) -> sum + vertex.getCostToReachFromPreviousVertex(), Integer::sum);
 
+        List<RoutingInstruction> display = RouteDisplay.display(shortestPathVertices);
+
+
+
         System.out.println("Shortest Path Vertex: " + shortestPathVertices);
         System.out.println("Total cost: " + totalCost);
+
+        display.forEach(ri -> {
+          System.out.println(ri.getType() + ": " + ri.getStartingVertex().getDisplayName() + " to " + ri.getEndingVertex().getDisplayName() + " for " + ri.getTotalCost() + " minutes.");
+        });
       } catch (NoPathExistsException e) {
         System.out.println("Something went wrong; No path found");
       }

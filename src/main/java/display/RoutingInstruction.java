@@ -24,6 +24,23 @@ public class RoutingInstruction {
 
   private Vertex endingVertex;
   private int totalCost;
+
+  public RoutingInstructionType getType() {
+    return type;
+  }
+
+  public Vertex getStartingVertex() {
+    return startingVertex;
+  }
+
+  public Vertex getEndingVertex() {
+    return endingVertex;
+  }
+
+  public int getTotalCost() {
+    return totalCost;
+  }
+
   public static enum RoutingInstructionType {
     REGULAR,
     INTERCHANGE;
