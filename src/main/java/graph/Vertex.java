@@ -27,7 +27,7 @@ public class Vertex {
     return displayName;
   }
 
-  String getId() {
+  public String getId() {
     return id;
   }
 

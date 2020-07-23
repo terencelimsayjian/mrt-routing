@@ -9,12 +9,12 @@ import traindata.Edge;
 import traindata.TrainDataParser;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Application {
   public static void main(String[] args) {
     Graph graph = initialiseMrtMap();
-
     Scanner scanner = new Scanner(System.in);
 
     System.out.println("Welcome to Singapore's MRT!");
@@ -22,21 +22,17 @@ public class Application {
     String continueAsking = "y";
     while (!continueAsking.equals("N")) {
 
-      String startingStationId = getStationIdFromInput(graph, scanner, "starting");
-      String endingStationId = getStationIdFromInput(graph, scanner, "ending");
+      Vertex startingStation = getStationIdFromInput(graph, scanner, "starting");
+      Vertex endingStation = getStationIdFromInput(graph, scanner, "ending");
 
       try {
-        System.out.println("Finding path from " + startingStationId + " to " + endingStationId);
-        List<ShortestPathVertex> shortestPathVertices = graph.findShortestPathAStar(startingStationId, endingStationId);
+        System.out.println("Finding path from " + startingStation.getDisplayName() + " to " + endingStation.getDisplayName());
 
-        Integer totalCost = shortestPathVertices.stream().reduce(0, (sum, vertex) -> sum + vertex.getCostToReachFromPreviousVertex(), Integer::sum);
-
+        List<ShortestPathVertex> shortestPathVertices = graph.findShortestPathAStar(startingStation.getId(), endingStation.getId());
         List<RoutingInstruction> display = RouteDisplay.display(shortestPathVertices);
 
-
-
-        System.out.println("Shortest Path Vertex: " + shortestPathVertices);
-        System.out.println("Total cost: " + totalCost);
+        Integer totalCost = display.stream().reduce(0, (sum, v) -> sum + v.getTotalCost(), Integer::sum);
+        System.out.println("Journey will take " + totalCost + " minutes");
 
         display.forEach(ri -> {
           System.out.println(ri.getType() + ": " + ri.getStartingVertex().getDisplayName() + " to " + ri.getEndingVertex().getDisplayName() + " for " + ri.getTotalCost() + " minutes.");
@@ -46,39 +42,27 @@ public class Application {
       }
 
       System.out.println("Would you like to try again? [y/N]");
-      continueAsking = scanner.next();
+      continueAsking = scanner.nextLine();
     }
-
-    // TODO:
-    // 1. Print out results:
-    //    a. Make get shortest path return vertices with cost (DONE)
-    //    b. Either decide to return an interface that you can build up the route by itself, or have to query the graph again (DONE)
-    //    c. Display UI as follows:
-    // Instructions
-    // Continue along line CC1 -> CC9 x total minutes
-    // Change at interchange CC9 -> DL8 x minutes
-    // Continue along line DL8 -> DL19 x total minutes
-
-    // 2. Allow for name input
-    // Only allow name or ID at one time, but not both
-
   }
 
-  private static String getStationIdFromInput(Graph graph, Scanner scanner, String stationLabel) {
-    boolean isError = true;
-    String startingStationId = null;
-
-    while (isError) {
+  private static Vertex getStationIdFromInput(Graph graph, Scanner scanner, String stationLabel) {
+    while (true) {
       System.out.println("Enter " + stationLabel + " Station ID or Name: ");
-      startingStationId = scanner.next();
+      String stationNameOrId = scanner.nextLine().toUpperCase();
 
-      if (graph.hasVertex(startingStationId)) {
-        isError = false;
-      } else {
-        System.out.println("That station does not exist, please try again.");
+      Optional<Vertex> vertexById = graph.findById(stationNameOrId);
+      if (vertexById.isPresent()) {
+        return vertexById.get();
       }
+
+      List<Vertex> verticesByName = graph.findByName(stationNameOrId);
+      if (!verticesByName.isEmpty()) {
+        return verticesByName.get(0);
+      }
+
+      System.out.println("That station does not exist, please try again.");
     }
-    return startingStationId;
   }
 
   private static Graph initialiseMrtMap() {
